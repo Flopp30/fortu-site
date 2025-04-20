@@ -4,8 +4,12 @@ version = "0.1.0"
 description = ""
 requires-python = ">=3.12"
 dependencies = [
+    "alembic>=1.15.2",
     "asyncpg>=0.30.0",
+    "bcrypt>=4.3.0",
+    "dishka>=1.5.3",
     "fastapi>=0.115.12",
+    "jinja2>=3.1.6",
     "orjson>=3.10.16",
     "sqlalchemy>=2.0.40",
     "uvicorn>=0.34.2",
@@ -15,3 +19,14 @@ dependencies = [
 dev = [
     "pre-commit>=4.2.0",
 ]
+
+[tool.mypy]
+ignore_missing_imports = true
+follow_imports = 'skip'
+warn_no_return = false
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+quote-style = "single"

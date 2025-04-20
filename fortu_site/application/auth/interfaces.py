@@ -1,0 +1,6 @@
+from typing import Protocol
+
+
+class IPasswordEncryptor(Protocol):
+    def hash_password(self, raw_password: str) -> str: ...
+    def verify_password(self, raw_password: str, hashed_password: str) -> bool: ...

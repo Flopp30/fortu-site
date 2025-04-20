@@ -1,5 +1,5 @@
 default_language_version:
-  python: python3.13
+  python: python3.12
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -37,6 +37,12 @@ repos:
     - pydantic
     - pydantic-settings
     - fastapi
+    - sqlalchemy
+    - sqlalchemy
+    - asyncpg
+    - bcrypt
+    - dishka
+    - alembic
 
   - id: mypy
     alias: mypy_strict
@@ -51,4 +57,9 @@ repos:
     - types-PyYAML
     - pydantic
     - pydantic-settings
+    - sqlalchemy
     - fastapi
+    - asyncpg
+    - bcrypt
+    - dishka
+    - alembic
