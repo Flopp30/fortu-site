@@ -9,4 +9,4 @@ class User:
     email: str
     password: str
     created_at: datetime.datetime = dc.field(init=False)
-    is_superuser: bool = False
+    is_admin: bool = False

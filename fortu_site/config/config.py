@@ -27,7 +27,7 @@ class DatabaseConfig(BaseFromEnvConfig):
 class LoggingConfig(BaseFromEnvConfig):
     level: str = Field('INFO', alias='LOGGING_LEVEL')
     file_dir: Annotated[str | None, BeforeValidator(env_to_abs_path)] = Field('./logs', alias='LOGGING_FILE_DIR')
-    file_name: str = Field('super_chat.log', alias='LOGGING_FILE_NAME')
+    file_name: str = Field('fortu-site.log', alias='LOGGING_FILE_NAME')
     log_format: str = Field(
         '%(asctime)s - %(name)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s',
         alias='LOGGING_FORMAT',
@@ -49,3 +49,7 @@ class ApiConfig(BaseFromEnvConfig):
     allow_methods: Annotated[list[str], BeforeValidator(split_string_from_env)] = Field(
         ['*'], alias='API_ALLOW_METHODS'
     )
+
+
+class AuthConfig(BaseFromEnvConfig):
+    session_ttl_sec: int = Field(60 * 60, alias='AUTH_SESSION_TTL_SEC')

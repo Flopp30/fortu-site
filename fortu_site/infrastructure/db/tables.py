@@ -1,4 +1,6 @@
-from sqlalchemy import MetaData
+import uuid
+
+from sqlalchemy import MetaData, Table, Column, Integer, String, DateTime, UUID, ForeignKey, Boolean
 
 convention = {
     'ix': 'ix_%(column_0_label)s',  # INDEX
@@ -10,3 +12,24 @@ convention = {
 
 
 metadata = MetaData(naming_convention=convention)
+
+users_table = Table(
+    'users',
+    metadata,
+    Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('name', String(255), nullable=False),
+    Column('email', String(255), nullable=False, unique=True),
+    Column('password', String(255), nullable=False),
+    Column('created_at', DateTime, nullable=False),
+    Column('is_admin', Boolean, default=False),
+)
+
+
+sessions_table = Table(
+    'sessions',
+    metadata,
+    Column('id', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+    Column('user_id', Integer, ForeignKey('users.id'), nullable=False),
+    Column('created_at', DateTime, nullable=False),
+    Column('expired_at', DateTime, nullable=False),
+)

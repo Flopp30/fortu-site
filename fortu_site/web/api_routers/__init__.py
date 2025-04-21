@@ -1,6 +1,11 @@
 from fastapi import FastAPI
-from fortu_site.web.api_routers import healthcheck
+from fortu_site.web.api_routers import healthcheck, auth
 
 
 def setup_api_routers(app: FastAPI):
-    app.include_router(healthcheck.setup())
+    routers = [
+        healthcheck,
+        auth,
+    ]
+    for router in routers:
+        app.include_router(router.setup())

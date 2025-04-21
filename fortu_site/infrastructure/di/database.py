@@ -9,9 +9,11 @@ from sqlalchemy.ext.asyncio import (
     AsyncSession,
 )
 
+from fortu_site.application.auth.interfaces import ISessionRepository
 from fortu_site.application.db import IUoW
 from fortu_site.application.user.interfaces import IUserRepository
 from fortu_site.config import DatabaseConfig
+from fortu_site.infrastructure.db.repositories.auth import SqlAlchemySessionRepository
 from fortu_site.infrastructure.db.repositories.user import SqlAlchemyUserRepository
 from fortu_site.infrastructure.db.uow import UoW
 
@@ -55,3 +57,4 @@ class RepositoriesProvider(Provider):
     scope = Scope.REQUEST
 
     user = provide(SqlAlchemyUserRepository, provides=IUserRepository)
+    session = provide(SqlAlchemySessionRepository, provides=ISessionRepository)

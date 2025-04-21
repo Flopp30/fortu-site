@@ -6,7 +6,7 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
-from fortu_site.config import DatabaseConfig, WebConfig, ApiConfig
+from fortu_site.config import DatabaseConfig, WebConfig, ApiConfig, AuthConfig
 from fortu_site.infrastructure.di.config import ConfigProvider
 from fortu_site.infrastructure.di.database import RepositoriesProvider, DatabaseProvider
 from fortu_site.infrastructure.di.security import SecurityProvider
@@ -58,6 +58,7 @@ def setup_ioc_container(app: FastAPI, web_config: WebConfig):
         context={
             # config
             DatabaseConfig: DatabaseConfig.from_env(),
+            AuthConfig: AuthConfig.from_env(),
             # templates
             Jinja2Templates: get_templates(web_config),
         },

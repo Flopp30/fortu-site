@@ -1,0 +1,56 @@
+version: "3.8"
+
+x-default-env: &default-env
+  env_file:
+    - .env.docker
+
+x-default-service: &default-service
+  <<: *default-env
+  restart: on-failure
+
+
+services:
+  db:
+    <<: *default-service
+    container_name: fortu-site-db
+    image: postgres:latest
+    command: postgres -c 'max_connections=999'
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${DB_NAME} -U $${DB_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrations:
+    <<: *default-env
+    container_name: fortu-site-migrations
+    build:
+      dockerfile: build/Dockerfile-migrations
+    restart: no
+    depends_on:
+      - db
+
+  web:
+    <<: *default-service
+    container_name: fortu-site-web
+    build:
+      dockerfile: build/Dockerfile-web
+    ports:
+      - "8000:8000"
+    depends_on:
+#      - migrations
+      - db
+    volumes:
+      - .:/app
+
+
+volumes:
+  postgresql-data:
