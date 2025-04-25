@@ -19,7 +19,9 @@
             <label for="confirm_password">Подтвердите пароль</label>
             <input type="password" id="confirm_password" name="confirm_password" required>
         </div>
-        <div class="error-message" id="register-error"></div>
+        {% if error_message %}
+            <div class="error-message" id="register-error">{{ error_message }}</div>
+        {% endif %}
         <button type="submit">Зарегистрироваться</button>
     </form>
     <div class="form-footer">

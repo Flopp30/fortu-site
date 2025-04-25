@@ -35,9 +35,9 @@ async def login(
     #         "login_form.html",
     #         {
     #             "request": request,
-    #             "error": "Неверное имя пользователя или пароль"
+    #             "error_message": "Неверное имя пользователя или пароль"
     #         }
-
+    # FIXME обработать все ошибки тут, в register и в logout (UUID(session_id) может 500сотнуть)
     return success_auth_response(auth_user=auth_user, templates=templates, request=request)
 
 
@@ -71,8 +71,7 @@ async def logout(
     use_case: FromDishka[UserLogoutUseCase],
     templates: FromDishka[Jinja2Templates],
 ):
-    # Удаляем информацию о пользователе из сессии
-    session_id: str | None = request.cookies.pop('sessionId', None)
+    session_id: str | None = request.cookies.get('sessionId', None)
     if session_id:
         await use_case(session_id=UUID(session_id))
 

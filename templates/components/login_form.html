@@ -11,7 +11,9 @@
             <label for="password">Пароль</label>
             <input type="password" id="password" name="password" required>
         </div>
-        <div class="error-message" id="login-error"></div>
+        {% if error_message %}
+            <div class="error-message" id="login-error">{{ error_message }}</div>
+        {% endif %}
         <button type="submit">Войти</button>
     </form>
     <div class="form-footer">
