@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teawish</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/index.css') }}">
+    <script src="{{ url_for('static', path='/js/vendors/htmx.min.js') }}"></script>
+</head>
+<body id="body">
+    {% include "components/navbar.html" %}
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="{{ url_for('static', path='/js/main.js') }}"></script>
+</body>
+</html>

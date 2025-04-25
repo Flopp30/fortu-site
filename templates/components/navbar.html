@@ -1,0 +1,32 @@
+<div id="nav-container">
+    <div id="logo"
+         hx-get="{{ url_for('home_page') }}"
+         hx-target="#content"
+         hx-swap="innerHTML"
+         style="cursor: pointer;">
+        Teawish
+    </div>
+    {% if user %}
+        <div id="user-info">
+            Привет, {{ user.name }}!
+            <button hx-post="{{ url_for('logout') }}"
+                    hx-target="#body"
+                    hx-swap="innerHTML">
+                Выйти
+            </button>
+        </div>
+    {% else %}
+        <div id="auth-buttons">
+            <button hx-get="{{ url_for('login_form') }}"
+                    hx-target="#content"
+                    hx-swap="innerHTML">
+                Войти
+            </button>
+            <button hx-get="{{ url_for('register_form') }}"
+                    hx-target="#content"
+                    hx-swap="innerHTML">
+                Регистрация
+            </button>
+        </div>
+    {% endif %}
+</div>

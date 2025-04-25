@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fortuhost site</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='/css/index.css') }}">
-    <script src="{{ url_for('static', path='/js/vendors/htmx.min.js') }}"></script>
+{% extends "base.html" %}
 
-</head>
-<body>
-<h1>Hello bitch</h1>
-<script src="{{ url_for('static', path='/js/main.js') }}"></script>
-</body>
-</html>
+{% block content %}
+{% include "components/home.html" %}
+{% endblock %}

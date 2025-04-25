@@ -1,0 +1,26 @@
+<div id="login-form">
+    <h2>Вход в систему</h2>
+    <form hx-post="{{ url_for('login') }}"
+          hx-target="#body"
+          hx-swap="innerHTML">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Пароль</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div class="error-message" id="login-error"></div>
+        <button type="submit">Войти</button>
+    </form>
+    <div class="form-footer">
+        <p>Нет аккаунта?
+            <a href="#" hx-get="{{ url_for('register_form') }}"
+                       hx-target="#content"
+                       hx-swap="innerHTML">
+                Зарегистрироваться
+            </a>
+        </p>
+    </div>
+</div>

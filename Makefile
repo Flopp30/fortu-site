@@ -1,21 +1,21 @@
 run:
 	chmod +x ./load_env.sh \
 	&& . ./load_env.sh \
-	&& uv run uvicorn fortu_site.main:app --host 0.0.0.0 --port 8000 --reload
+	&& poetry run uvicorn fortu_site.main:app --host 0.0.0.0 --port 8000 --reload
 
 make_migration:
 	@if [ -z "$(NAME)" ]; then \
 		echo "Error: migration name undefined. Use: make make_migration NAME='your_name'"; \
 		exit 1; \
 	fi
-	@uv run alembic revision --autogenerate -m "$(NAME)"
+	@poetry run alembic revision --autogenerate -m "$(NAME)"
 
 migrate:
-	uv run alembic upgrade head
+	poetry run alembic upgrade head
 
 downgrade:
-	uv run alembic downgrade -1
+	poetry run alembic downgrade -1
 
 lint:
-	@uv run pre-commit install
-	@uv run pre-commit run --all-files
+	@poetry run pre-commit install
+	@poetry run pre-commit run --all-files

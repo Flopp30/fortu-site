@@ -12,7 +12,7 @@ x-default-service: &default-service
 services:
   db:
     <<: *default-service
-    container_name: fortu-site-db
+    container_name: teawish-db
     image: postgres:latest
     command: postgres -c 'max_connections=999'
     environment:
@@ -31,25 +31,26 @@ services:
 
   migrations:
     <<: *default-env
-    container_name: fortu-site-migrations
+    container_name: teawish-migrations
     build:
-      dockerfile: build/Dockerfile-migrations
+      dockerfile: Dockerfile
+      target: migrations
     restart: no
     depends_on:
       - db
 
   web:
     <<: *default-service
-    container_name: fortu-site-web
+    container_name: teawish-web
     build:
-      dockerfile: build/Dockerfile-web
+      dockerfile: Dockerfile
+      target: web
     ports:
       - "8000:8000"
-    depends_on:
-#      - migrations
-      - db
     volumes:
       - .:/app
+    depends_on:
+      - migrations
 
 
 volumes:
