@@ -10,6 +10,7 @@ from starlette.templating import Jinja2Templates
 
 from teawish.application.auth.interfaces import SessionStorageFilter, ISessionRepository
 from teawish.application.user.models import User
+from teawish.web.responses import change_browser_location_response
 
 
 @inject
@@ -26,7 +27,8 @@ async def home_page(
         'request': request,
         'user': user,
     }
-    return templates.TemplateResponse('components/home.html', context)
+    response: HTMLResponse = templates.TemplateResponse('components/home.html', context)
+    return change_browser_location_response(response, '/')
 
 
 class ServerStatus(Enum):

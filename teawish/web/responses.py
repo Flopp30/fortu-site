@@ -28,3 +28,8 @@ def success_auth_response(auth_user: AuthorizedUser, request: Request, templates
         expires=session.expired_at.astimezone(timezone.utc),
     )
     return response
+
+
+def change_browser_location_response(response: HTMLResponse, target_location: str) -> HTMLResponse:
+    response.headers['HX-Replace-Url'] = target_location
+    return response
