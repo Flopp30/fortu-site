@@ -1,7 +1,7 @@
 run:
 	chmod +x ./load_env.sh \
 	&& . ./load_env.sh \
-	&& poetry run uvicorn fortu_site.main:app --host 0.0.0.0 --port 8000 --reload
+	&& poetry run uvicorn teawish.main:app --host 0.0.0.0 --port 8000 --reload
 
 make_migration:
 	@if [ -z "$(NAME)" ]; then \
