@@ -1,34 +1,36 @@
-<div id="register-form">
-    <h2>Регистрация</h2>
+<div id="register-form" class="form">
+    <h2 class="form-header">Регистрация</h2>
     <form hx-post="{{ url_for('register') }}"
-          hx-target="#body"
+          hx-target="#main-content"
+          hx-target-error="#content"
           hx-swap="innerHTML">
         <div class="form-group">
-            <label for="username">Имя пользователя</label>
-            <input type="text" id="username" name="username" required>
+            <label for="username" class="visually-hidden">Имя пользователя</label>
+            <input type="text" id="username" name="username" placeholder="Имя пользователя" required>
         </div>
         <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
+            <label for="email" class="visually-hidden">Email</label>
+            <input type="email" id="email" name="email" placeholder="Email" required>
         </div>
         <div class="form-group">
-            <label for="password">Пароль</label>
-            <input type="password" id="password" name="password" required>
+            <label for="password" class="visually-hidden">Пароль</label>
+            <input type="password" id="password" name="password" placeholder="Пароль" required>
         </div>
         <div class="form-group">
-            <label for="confirm_password">Подтвердите пароль</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
+            <label for="confirm_password" class="visually-hidden">Повторите пароль</label>
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Повторите пароль" required>
         </div>
         {% if error_message %}
             <div class="error-message" id="register-error">{{ error_message }}</div>
         {% endif %}
-        <button type="submit">Зарегистрироваться</button>
+        <button class="button" type="submit">Зарегистрироваться</button>
     </form>
     <div class="form-footer">
         <p>Уже есть аккаунт?
             <a href="#" hx-get="{{ url_for('login_form') }}"
-                       hx-target="#content"
-                       hx-swap="innerHTML">
+               hx-target="#form-container"
+               hx-target-error="#content"
+               hx-swap="innerHTML">
                 Войти
             </a>
         </p>

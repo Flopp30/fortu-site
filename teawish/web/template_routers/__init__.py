@@ -1,8 +1,13 @@
 from fastapi import FastAPI
-from teawish.web.template_routers import index, auth, components
+from teawish.web.template_routers import index, auth, components, launcher
 
 
 def setup_template_routers(app: FastAPI):
-    app.include_router(index.setup())
-    app.include_router(auth.setup())
-    app.include_router(components.setup())
+    routers = [
+        index.setup(),
+        auth.setup(),
+        components.setup(),
+        launcher.setup(),
+    ]
+    for router in routers:
+        app.include_router(router)

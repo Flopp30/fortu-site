@@ -40,6 +40,8 @@ class WebConfig(BaseFromEnvConfig):
     static_dir: Annotated[str, BeforeValidator(env_to_abs_path)] = Field('./static/', alias='WEB_FILES_STATIC_DIR')
     static_path: str = Field('/static/', alias='WEB_STATIC_PATH')
 
+    discord_link: str = Field('https://discord.com', alias='DISCORD_LINK')
+
 
 class ApiConfig(BaseFromEnvConfig):
     cors_origins: Annotated[list[str], BeforeValidator(split_string_from_env)] = Field(['*'], alias='API_CORS_ORIGINS')
@@ -53,3 +55,7 @@ class ApiConfig(BaseFromEnvConfig):
 
 class AuthConfig(BaseFromEnvConfig):
     session_ttl_sec: int = Field(2592000, alias='AUTH_SESSION_TTL_SEC')
+
+
+class LauncherConfig(BaseFromEnvConfig):
+    launcher_path: Annotated[str, BeforeValidator(env_to_abs_path)] = Field('./from_env.sh', alias='LAUNCHER_PATH')

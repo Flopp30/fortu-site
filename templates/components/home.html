@@ -1,12 +1,24 @@
 <div id="home-content">
-    <h1>Добро пожаловать на Teawish</h1>
-    {% if user %}
-        <p>Вы вошли как {{ user.name }}</p>
-        <div id="user-dashboard">
-            <h2>Ваш дашборд</h2>
-            <p>Здесь будет отображаться содержимое для авторизованных пользователей</p>
+    <div class="server-info-container">
+        <h1>TeaWish</h1>
+        <h1 class="league-season"><span class="highlight">V</span> season</h1>
+        <div id="online-indicator-container"
+             hx-get="{{ url_for('online_indicator') }}"
+             hx-trigger="load delay:1s, every 5s"
+             hx-target="#online-indicator-container"
+             hx-swap="innerHTML"
+            hx-target-error="#content">
+            <!--- Empty div ensuring place until real indicator has been loaded --->
+            <div id="waiting-indicator" class="server-indicator waiting"><span>Получение информации</span></div>
         </div>
-    {% else %}
-        <p>Пожалуйста, войдите или зарегистрируйтесь для доступа ко всем функциям.</p>
-    {% endif %}
+        <a href="{{ url_for('download_launcher') }}" class="button" download>Скачать лаунчер</a>
+    </div>
+    <div id="form-container">
+        {% if user %}
+            {% include "components/feeds.html" %}
+        {% else %}
+            {% include "components/login_form.html" %}
+        {% endif %}
+    </div>
+
 </div>

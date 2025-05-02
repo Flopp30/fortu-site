@@ -1,0 +1,16 @@
+<div class="error-page error-500">
+    <div class="error-content">
+        <h1>500</h1>
+        <h2>Ошибка сервера</h2>
+        <p>Упс! Что-то пошло не так.</p>
+        <p>Мы уже работаем над этим...</p>
+        <div class="error-actions">
+            <button class="button"
+                    hx-get="{{ url_for('home_page') }}"
+                    hx-target="#content"
+                    hx-swap="innerHTML">
+                Вернуться на главную
+            </button>
+        </div>
+    </div>
+</div>

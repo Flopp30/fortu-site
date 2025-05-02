@@ -1,0 +1,9 @@
+{% if server_status == 'online' %}
+<div id="online-indicator" class="server-indicator online">
+    <span>Онлайн: <b>{{ online_users }}/{{ total_users }}</b></span>
+</div>
+{% else %}
+<div id="offline-indicator" class="server-indicator offline">
+    <span>Оффлайн</span>
+</div>
+{% endif %}

@@ -1,32 +1,51 @@
 <div id="nav-container">
-    <div id="logo"
-         hx-get="{{ url_for('home_page') }}"
-         hx-target="#content"
-         hx-swap="innerHTML"
-         style="cursor: pointer;">
-        Teawish
+    <div class="nav-left-group">
+        <div id="logo"
+             hx-get="{{ url_for('home_page') }}"
+             hx-target="#content"
+             hx-target-error="#content"
+             hx-swap="innerHTML"
+             style="cursor: pointer;">
+            <img src="{{ url_for('static', path='/img/logo.svg') }}" alt="Teawish">
+        </div>
+        <div id="site-name"
+             hx-get="{{ url_for('home_page') }}"
+             hx-target="#content"
+             hx-target-error="#content"
+             hx-swap="innerHTML"
+             style="cursor: pointer;">
+            TeaWish
+        </div>
     </div>
-    {% if user %}
-        <div id="user-info">
-            Привет, {{ user.name }}!
-            <button hx-post="{{ url_for('logout') }}"
-                    hx-target="#body"
-                    hx-swap="innerHTML">
-                Выйти
-            </button>
+
+    <div class="nav-right-group">
+        {% if user and user.is_admin %}
+            <div id="admin-link"
+                 class="nav-item">
+                Админ панель
+            </div>
+        {% endif %}
+        <div id="main-page-link"
+             hx-get="{{ url_for('home_page') }}"
+             hx-target="#content"
+             hx-target-error="#content"
+             hx-swap="innerHTML"
+             class="nav-item">
+            Главная
         </div>
-    {% else %}
-        <div id="auth-buttons">
-            <button hx-get="{{ url_for('login_form') }}"
-                    hx-target="#content"
-                    hx-swap="innerHTML">
-                Войти
-            </button>
-            <button hx-get="{{ url_for('register_form') }}"
-                    hx-target="#content"
-                    hx-swap="innerHTML">
-                Регистрация
-            </button>
-        </div>
-    {% endif %}
+        {% if user %}
+            <div id="user-info" class="nav-item disabled">
+                {{ user.name }}
+            </div>
+            <div id="logout-link"
+                 href="#"
+                 hx-post="{{ url_for('logout') }}"
+                 hx-target="#main-content"
+                 hx-target-error="#content"
+                 hx-swap="innerHTML"
+                class="nav-item">
+                    Выйти
+            </div>
+        {% endif %}
+    </div>
 </div>

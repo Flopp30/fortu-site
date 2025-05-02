@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="error-page error-404">
+    <div class="error-content">
+        <h1>404</h1>
+        <h2>Страница не найдена</h2>
+{#        <p>Кажется, вы заблудились в чайном лесу...</p>#}
+        <div class="error-actions">
+            <button class="button"
+                    hx-get="{{ url_for('home_page') }}"
+                    hx-target="#content"
+                    hx-swap="innerHTML">
+                Вернуться на главную
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,505 @@
+:root {
+    --base-white-color: #FFF;
+    --base-green-color: #27696A;
+
+    --hover-btn-color: #1C4343;
+    --pressed-btn-color: #0F2B2C;
+
+    --disabled-link-color: #656565;
+    --hover-link-color: #6495C7;
+    --pressed-link-color: #1C4343;
+
+    --waiting-indicator-color: #3B6E90;
+    --loaded-indicator-color: #3B904E;
+    --error-indicator-color: #90413B;
+
+    --error-text-color: #90413B;
+
+    --gray-background-color: rgba(19, 28, 33, 0.8)  /* серый фон для форм, футера и хедера */
+}
+
+
+@font-face {
+    font-family: 'Kanit';
+    src: url('../fonts/Kanit-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kanit';
+    src: url('../fonts/Kanit-SemiBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Kanit';
+    src: url('../fonts/Kanit-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Kanit', sans-serif;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    background-image: url('../img/background.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: var(--base-white-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+    /* Добавляем затемнение через background-color */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Создаем многослойный фон с изображением и затемнением */
+    background-blend-mode: overlay;
+}
+
+#main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+}
+
+#content {
+    flex: 1;
+    padding: 20px;
+}
+
+/* Стили навигационной панели */
+#nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background-color: var(--gray-background-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.nav-left-group {
+    display: flex;
+    align-items: center;
+}
+
+#logo {
+    margin-right: 10px;
+}
+
+#logo img {
+    height: 32px;
+    width: auto;
+}
+
+#site-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--base-white-color);
+    letter-spacing: 0.5px;
+}
+
+.nav-right-group {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Отступ между элементами */
+}
+
+.nav-item {
+    color: var(--base-white-color);
+    font-size: 16px;
+    transition: color 0.3s;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.nav-item:not(.disabled):hover {
+    color: var(--base-green-color);
+}
+
+.nav-item .disabled {
+    cursor: default;
+}
+
+
+/* Стили домашней страницы */
+#home-content {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    flex-wrap: wrap;
+    gap: 90px;
+}
+
+/* Левая часть с заголовками и кнопкой */
+.server-info-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 100%;
+    text-align: center;
+}
+
+#home-content h1 {
+    font-family: 'Kanit', sans-serif;
+    font-size: 100px;
+    margin-bottom: 0;
+    color: var(--base-white-color);
+    line-height: 1;
+    font-weight: 400; /* Менее жирный шрифт */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.5px; /* Небольшой интервал между буквами */
+}
+
+#home-content h1.league-season {
+    font-size: 72px;
+    color: var(--base-white-color);
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-weight: 300; /* Более тонкий шрифт для второй строки */
+}
+
+#home-content h1.league-season::first-letter {
+    color: var(--base-green-color);
+    font-weight: 300;
+}
+
+.button {
+    width: 100%;
+    background-color: var(--base-green-color);
+    color: var(--base-white-color);
+    padding: 15px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    transition: background-color 0.3s;
+    text-decoration: none;
+}
+
+.button:hover, button[type="submit"]:hover {
+    background-color: var(--hover-btn-color);
+}
+
+.button:active, button[type="submit"]:active {
+    background-color: var(--pressed-btn-color);
+}
+
+.disabled-link {
+    color: var(--disabled-link-color) !important;
+    cursor: default;
+    pointer-events: none;
+}
+
+button:disabled, .button:disabled {
+    background-color: var(--disabled-link-color);
+    cursor: not-allowed;
+}
+
+
+/*Стили индикаторов*/
+.server-indicator {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-weight: 500;
+    background-color: var(--gray-background-color);
+    color: var(--base-white-color);
+}
+
+.server-indicator::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+#online-indicator::before {
+    background-color: var(--loaded-indicator-color);
+}
+
+#offline-indicator::before {
+    background-color: var(--error-indicator-color);
+}
+
+#waiting-indicator::before {
+    background-color: var(--waiting-indicator-color);
+}
+
+
+/* Стили форм */
+#form-container {
+    border-radius: 10px;
+    width: 40%;
+    display: flex;
+    align-items: center;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 30px;
+    border: none;
+    background-color: rgba(72, 84, 97, 0.7);
+    color: var(--base-white-color);
+    font-size: 16px;
+    transition: background-color 0.3s;
+    -webkit-appearance: none;
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.form-group input:focus {
+    outline: none;
+    background-color: rgba(72, 84, 97, 0.9); /* Немного темнее при фокусе */
+    color: var(--base-white-color); /* Сохраняем белый цвет текста при фокусе */
+    box-shadow: 0 0 0 2px rgba(0, 150, 136, 0.3); /* Добавляем тонкий контур в цвет кнопок */
+}
+
+.form-group input:not(:placeholder-shown) {
+    background-color: rgba(72, 84, 97, 0.8); /* Фон для заполненных полей */
+    color: var(--base-white-color); /* Белый текст для заполненных полей */
+}
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover,
+.form-group input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--base-white-color);
+    -webkit-box-shadow: 0 0 0 1000px rgba(72, 84, 97, 0.9) inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.form {
+    background-color: var(--gray-background-color);
+    border-radius: 15px;
+    padding: 25px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.form-header {
+    background-color: var(--base-green-color);
+    color: var(--base-white-color);
+    text-align: center;
+    padding: 15px 0;
+    margin: -25px -25px 25px -25px;
+    border-radius: 15px 15px 0 0;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+}
+
+/* Стиль для ссылок в форме */
+.form-footer {
+    margin-top: 20px;
+    text-align: center;
+    color: var(--base-white-color);
+    font-size: 16px;
+}
+
+.form-footer a {
+    color: var(--base-green-color);
+    text-decoration: none;
+    transition: color 0.3s;
+    font-weight: 500;
+}
+
+.form-footer a:hover {
+    color: var(--hover-btn-color);
+    text-decoration: underline;
+}
+
+.error-message {
+    color: var(--error-text-color);
+    margin: 10px 0;
+}
+
+/* Стили футера */
+#footer-container {
+    background-color: var(--gray-background-color);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--base-white-color);
+}
+
+#discord-link img {
+    height: 30px;
+    width: auto;
+    vertical-align: middle;
+}
+
+/*Ошибки*/
+.error-page {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-height: 70vh;
+    padding: 30px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.error-content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: var(--gray-background-color);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.error-page h1 {
+    font-size: 6rem;
+    margin: 0;
+    background: linear-gradient(135deg, #00ccaa, #4a9a82);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 15px rgba(0, 204, 170, 0.5);
+}
+
+.error-page h2 {
+    font-size: 2rem;
+    margin: 10px 0 20px;
+    color: var(--base-white-color);
+}
+
+.error-page p {
+    font-size: 1.2rem;
+    color: var(--base-white-color);
+    margin-bottom: 30px;
+}
+
+@media (max-width: 900px) {
+    #home-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .server-info-container {
+        max-width: 100%;
+        text-align: center;
+        padding-right: 0;
+        margin-bottom: 30px;
+        align-items: center;
+    }
+
+    #form-container {
+        width: 100%;
+        max-width: 500px;
+        padding: 20px 15px;
+    }
+
+    .button {
+        align-self: center;
+    }
+}
+
+@media (max-width: 768px) {
+    #footer-container {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    #nav-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .nav-left-group {
+        margin-bottom: 15px;
+        justify-content: center; /* Центрируем лого и название сайта */
+    }
+
+    .nav-right-group {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .nav-item {
+        text-align: center;
+        padding: 12px;
+        width: 100%;
+    }
+
+    #user-info {
+        order: -1; /* Показывать имя пользователя первым в правой группе */
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 5px;
+    }
+
+    #admin-link, #main-page-link, #logout-link {
+        margin: 5px 10px;
+    }
+
+    #user-info {
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    #form-container {
+        padding: 15px 10px;
+    }
+
+    #login-form, #register-form {
+        padding: 20px 15px;
+    }
+
+}

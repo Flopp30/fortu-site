@@ -1,0 +1,13 @@
+<div id="footer-container">
+    <div class="footer-copyright" class="footer-item">
+        TeaWish.ru 2022-{{ now().year }}
+    </div>
+
+    <div class="footer-social">
+        <a id="discord-link"
+           href="{{ discord_link }}"
+           target="_blank">
+            <img src="{{ url_for('static', path='/img/discord.svg') }}" alt="Discord logo">
+        </a>
+    </div>
+</div>

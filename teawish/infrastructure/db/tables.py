@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import MetaData, Table, Column, String, DateTime, UUID, ForeignKey, Boolean
+from sqlalchemy import MetaData, Table, Column, String, DateTime, UUID, ForeignKey, Boolean, Integer, Text
 
 convention = {
     'ix': 'ix_%(column_0_label)s',  # INDEX
@@ -32,4 +32,15 @@ sessions_table = Table(
     Column('user_id', UUID(as_uuid=True), ForeignKey('users.id'), nullable=False),
     Column('created_at', DateTime, nullable=False),
     Column('expired_at', DateTime, nullable=False),
+)
+
+
+news_table = Table(
+    'news',
+    metadata,
+    Column('id', Integer, primary_key=True),
+    Column('title', String(255), nullable=False),
+    Column('text', Text, nullable=False),
+    Column('created_at', DateTime, nullable=False),
+    Column('creator_id', UUID, ForeignKey('users.id'), nullable=False),
 )

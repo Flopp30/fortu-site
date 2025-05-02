@@ -1,3 +1,4 @@
+from enum import Enum
 from uuid import UUID
 
 from dishka import FromDishka
@@ -21,11 +22,35 @@ async def home_page(
     session_id = request.cookies.get('sessionId')
     if session_id:
         user = await session_repo.get_user(SessionStorageFilter(session_id=UUID(session_id)))
-    context: dict = {'request': request, 'user': user}
+    context: dict = {
+        'request': request,
+        'user': user,
+    }
     return templates.TemplateResponse('components/home.html', context)
+
+
+class ServerStatus(Enum):
+    online = 'online'
+    offline = 'offline'
+
+
+@inject
+async def online_indicator(
+    request: Request,
+    templates: FromDishka[Jinja2Templates],
+) -> HTMLResponse:
+    context: dict = {
+        'request': request,
+        'online_users': 1,
+        'total_users': 20,
+        # 'server_status': ServerStatus.offline.value,
+        'server_status': ServerStatus.online.value,
+    }
+    return templates.TemplateResponse('components/online_indicator.html', context=context)
 
 
 def setup() -> APIRouter:
     router = APIRouter(tags=['components'], include_in_schema=False)
     router.add_api_route('/components/home', home_page, methods=['GET'])
+    router.add_api_route('/components/online_indicator', online_indicator, methods=['GET'])
     return router
