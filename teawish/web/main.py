@@ -88,6 +88,7 @@ def get_templates(web_config: WebConfig) -> Jinja2Templates:
 
 def register_filters(templates: Jinja2Templates, web_config: WebConfig):
     templates.env.globals['now'] = datetime.datetime.now
+    templates.env.globals['dateformat'] = datetime.datetime.strftime
     templates.env.globals['discord_link'] = web_config.discord_link
 
 

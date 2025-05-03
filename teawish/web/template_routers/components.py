@@ -8,9 +8,12 @@ from fastapi.requests import Request
 from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
+from teawish.application.auth.exceptions import ExpiredSessionException
 from teawish.application.auth.interfaces import SessionStorageFilter, ISessionRepository
+from teawish.application.news.dto import UserNewsOut
+from teawish.application.news.usecases import GetUserNewsUseCase
 from teawish.application.user.models import User
-from teawish.web.responses import change_browser_location_response
+from teawish.web.responses import change_browser_location_response, refresh_page_content_response
 
 
 @inject
@@ -51,8 +54,30 @@ async def online_indicator(
     return templates.TemplateResponse('components/online_indicator.html', context=context)
 
 
+@inject
+async def get_news(
+    request: Request,
+    templates: FromDishka[Jinja2Templates],
+    use_case: FromDishka[GetUserNewsUseCase],
+):
+    context = {'request': request}
+    session_id = request.cookies.get('sessionId')
+    if not session_id:
+        return refresh_page_content_response(templates, context)
+
+    try:
+        # сессия устарела
+        news_list: list[UserNewsOut] = await use_case(UUID(session_id))
+    except ExpiredSessionException:
+        return refresh_page_content_response(templates, context)
+
+    context.update({'news_list': news_list})
+    return templates.TemplateResponse('components/news_list.html', context)
+
+
 def setup() -> APIRouter:
     router = APIRouter(tags=['components'], include_in_schema=False)
     router.add_api_route('/components/home', home_page, methods=['GET'])
     router.add_api_route('/components/online_indicator', online_indicator, methods=['GET'])
+    router.add_api_route('/components/news/list', get_news, methods=['GET'])
     return router

@@ -256,12 +256,13 @@ button:disabled, .button:disabled {
 
 
 /* Стили форм */
-#form-container {
+.content-container {
     border-radius: 10px;
-    width: 40%;
     display: flex;
     align-items: center;
+    min-width: 40%;
 }
+
 
 .visually-hidden {
     position: absolute;
@@ -420,6 +421,56 @@ button:disabled, .button:disabled {
     margin-bottom: 30px;
 }
 
+/*Новости*/
+.news-item {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.news-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.news-item-title {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.news-item-date {
+    color: var(--base-green-color);
+    font-size: 0.9em;
+}
+
+.news-item-text {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.news-list {
+    overflow-x: auto;
+    max-height: 30rem;
+    scrollbar-width: thin;
+    scrollbar-color: #C6C6C6 transparent;
+}
+.news-list::-webkit-scrollbar {
+    width: 6px; /* Ширина полосы прокрутки */
+}
+
+.news-list::-webkit-scrollbar-thumb {
+    background: #C6C6C6; /* Цвет ползунка */
+    border-radius: 5px; /* Радиус скругления ползунка */
+}
+
+.news-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(198, 198, 198, 0.43); /* Цвет ползунка при наведении */
+}
+
+
 @media (max-width: 900px) {
     #home-content {
         flex-direction: column;
@@ -434,7 +485,7 @@ button:disabled, .button:disabled {
         align-items: center;
     }
 
-    #form-container {
+    .content-container {
         width: 100%;
         max-width: 500px;
         padding: 20px 15px;
@@ -494,7 +545,7 @@ button:disabled, .button:disabled {
 }
 
 @media (max-width: 480px) {
-    #form-container {
+    .content-container {
         padding: 15px 10px;
     }
 

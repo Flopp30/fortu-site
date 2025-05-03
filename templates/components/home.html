@@ -7,18 +7,25 @@
              hx-trigger="load delay:1s, every 5s"
              hx-target="#online-indicator-container"
              hx-swap="innerHTML"
-            hx-target-error="#content">
+             hx-target-error="#content">
             <!--- Empty div ensuring place until real indicator has been loaded --->
             <div id="waiting-indicator" class="server-indicator waiting"><span>Получение информации</span></div>
         </div>
         <a href="{{ url_for('download_launcher') }}" class="button" download>Скачать лаунчер</a>
     </div>
-    <div id="form-container">
-        {% if user %}
-            {% include "components/feeds.html" %}
-        {% else %}
+    {% if user %}
+        <div id="news-container"
+             class="content-container"
+             hx-get="{{ url_for('get_news') }}"
+             hx-trigger="load"
+             hx-target="#news-container"
+             hx-swap="innerHTML"
+             hx-target-error="#content">
+        </div>
+    {% else %}
+        <div id="form-container" class="content-container">
             {% include "components/login_form.html" %}
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
 
 </div>

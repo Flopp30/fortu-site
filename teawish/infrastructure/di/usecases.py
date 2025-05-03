@@ -5,6 +5,7 @@ from teawish.application.auth.use_cases import (
     UserLoginUseCase,
     UserLogoutUseCase,
 )
+from teawish.application.news.usecases import GetUserNewsUseCase
 
 
 class UseCaseProvider(Provider):
@@ -14,3 +15,6 @@ class UseCaseProvider(Provider):
     register = provide(UserRegisterUseCase)
     login = provide(UserLoginUseCase)
     logout = provide(UserLogoutUseCase)
+
+    # business
+    get_news = provide(GetUserNewsUseCase)

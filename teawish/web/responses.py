@@ -33,3 +33,9 @@ def success_auth_response(auth_user: AuthorizedUser, request: Request, templates
 def change_browser_location_response(response: HTMLResponse, target_location: str) -> HTMLResponse:
     response.headers['HX-Replace-Url'] = target_location
     return response
+
+
+def refresh_page_content_response(templates: Jinja2Templates, context: dict) -> HTMLResponse:
+    response = templates.TemplateResponse('components/refresh_page_content.html', context)
+    response.headers['HX-Retarget'] = '#main-content'
+    return change_browser_location_response(response, '/')

@@ -1,0 +1,34 @@
+<div id="news-form" class="form">
+    <h2 class="form-header">Новости</h2>
+    <div id="news-list" class="news-list">
+        {% for news in news_list %}
+
+            <div id="news-item-{{ loop.index }}" class="news-item">
+                <div id="news-item-{{ loop.index }}-header" class="news-item-header">
+                    <div id="news-item-{{ loop.index }}-title"
+                         class="news-item-title">
+                        {{ news.title }}
+                    </div>
+                    <div id="news-item-{{ loop.index }}-date"
+                         class="news-item-date">
+                        {{ news.created_at.strftime('%H:%M %d.%m.%Y') }}
+                    </div>
+                </div>
+                <div id="news-item-{{ loop.index }}-text"
+                     class="news-item-text">
+                    {{ news.text }}
+                </div>
+            </div>
+
+        {% else %}
+
+            <div id="news-item-empty" class="news-item">
+                <div id="news-item-empty-text"
+                     class="news-item-text">
+                    Следите за обновлениями, новости скоро появятся
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+</div>

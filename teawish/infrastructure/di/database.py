@@ -11,9 +11,11 @@ from sqlalchemy.ext.asyncio import (
 
 from teawish.application.auth.interfaces import ISessionRepository
 from teawish.application.db import IUoW
+from teawish.application.news.interfaces import INewsRepository
 from teawish.application.user.interfaces import IUserRepository
 from teawish.config import DatabaseConfig
 from teawish.infrastructure.db.repositories.auth import SqlAlchemySessionRepository
+from teawish.infrastructure.db.repositories.news import SqlAlchemyNewsRepository
 from teawish.infrastructure.db.repositories.user import SqlAlchemyUserRepository
 from teawish.infrastructure.db.uow import UoW
 
@@ -58,3 +60,4 @@ class RepositoriesProvider(Provider):
 
     user = provide(SqlAlchemyUserRepository, provides=IUserRepository)
     session = provide(SqlAlchemySessionRepository, provides=ISessionRepository)
+    news = provide(SqlAlchemyNewsRepository, provides=INewsRepository)
