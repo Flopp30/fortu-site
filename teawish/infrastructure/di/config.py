@@ -1,6 +1,6 @@
 from dishka import Provider, from_context, Scope
 
-from teawish.config import DatabaseConfig, AuthConfig, LauncherConfig
+from teawish.config import DatabaseConfig, AuthConfig, AppConfig
 
 
 class ConfigProvider(Provider):
@@ -8,4 +8,4 @@ class ConfigProvider(Provider):
 
     db = from_context(DatabaseConfig)
     auth = from_context(AuthConfig)
-    launcher = from_context(LauncherConfig)
+    app = from_context(AppConfig)

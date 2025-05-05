@@ -34,6 +34,24 @@ async def home_page(
     return change_browser_location_response(response, '/')
 
 
+@inject
+async def refresh_page_content(
+    request: Request,
+    templates: FromDishka[Jinja2Templates],
+    session_repo: FromDishka[ISessionRepository],
+) -> HTMLResponse:
+    user: User | None = None
+    session_id = request.cookies.get('sessionId')
+    if session_id:
+        user = await session_repo.get_user(SessionStorageFilter(session_id=UUID(session_id)))
+    context: dict = {
+        'request': request,
+        'user': user,
+    }
+    response: HTMLResponse = templates.TemplateResponse('components/refresh_page_content.html', context)
+    return change_browser_location_response(response, '/')
+
+
 class ServerStatus(Enum):
     online = 'online'
     offline = 'offline'
@@ -76,8 +94,9 @@ async def get_news(
 
 
 def setup() -> APIRouter:
-    router = APIRouter(tags=['components'], include_in_schema=False)
-    router.add_api_route('/components/home', home_page, methods=['GET'])
-    router.add_api_route('/components/online_indicator', online_indicator, methods=['GET'])
-    router.add_api_route('/components/news/list', get_news, methods=['GET'])
+    router = APIRouter(tags=['components'], include_in_schema=False, prefix='/components')
+    router.add_api_route('/home', home_page, methods=['GET'])
+    router.add_api_route('/refresh_page_content', refresh_page_content, methods=['GET'])
+    router.add_api_route('/online_indicator', online_indicator, methods=['GET'])
+    router.add_api_route('/news/list', get_news, methods=['GET'])
     return router

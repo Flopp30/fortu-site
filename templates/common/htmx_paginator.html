@@ -1,0 +1,71 @@
+<!-- использует 5 переменных
+1. list_offset - оффсет от начала
+2. list_limit - количество записей
+3. total_count - общее количество записей
+4. list_url - куда отправлять запрос для получения таблицы
+5. target_container_selector - куда вставляем ответ
+6. error_container_selector - куда вставлять ответ в случае ошибки
+ --->
+
+{% with
+    current_page = (list_offset // list_limit) + 1,
+    total_pages = (total_count // list_limit) + (total_count % list_limit > 0),
+    page_range = 3 %} <!-- Количество страниц перед и после текущей страницы --->
+    <div class="paginator">
+        <button hx-get="{{ list_url }}?offset={{ list_offset - list_limit }}&limit={{ list_limit }}"
+                hx-target="{{ target_container_selector }}"
+                hx-target-error="{{ error_container_selector }}"
+                class="paginator-button"
+                {% if current_page == 1 %}
+                disabled
+                {% endif %}>
+            <<
+        </button>
+
+        {% if current_page > page_range + 1 %}
+            <button hx-get="{{ list_url }}?offset=0&limit={{ list_limit }}"
+                    hx-target="{{ target_container_selector }}"
+                    hx-target-error="{{ error_container_selector }}"
+                    class="paginator-button">
+                1
+            </button>
+            <span>...</span>
+        {% endif %}
+
+        {% for page in range([current_page - page_range, 1]|max, [current_page + page_range, total_pages]|min + 1) %}
+            {% if page == current_page %}
+                <button class="paginator-button" disabled>{{ page }}</button>
+            {% else %}
+                <button hx-get="{{ list_url }}?offset={{ (page - 1) * list_limit }}&limit={{ list_limit }}"
+                        hx-target="{{ target_container_selector }}"
+                        hx-target-error="{{ error_container_selector }}"
+                        class="paginator-button">
+                    {{ page }}
+                </button>
+            {% endif %}
+        {% endfor %}
+
+        {% if current_page < total_pages - page_range %}
+            <span>...</span>
+            <button hx-get="{{ list_url }}?offset={{ (total_pages - 1) * list_limit }}&limit={{ list_limit }}"
+                    hx-target="{{ target_container_selector }}"
+                    hx-target-error="{{ error_container_selector }}"
+                    class="paginator-button">
+                {{ total_pages }}
+            </button>
+        {% endif %}
+
+        <button hx-get="{{ list_url }}?offset={{ list_offset + list_limit }}&limit={{ list_limit }}"
+                hx-target="{{ target_container_selector }}"
+                hx-target-error="{{ error_container_selector }}"
+                class="paginator-button"
+                {% if current_page == total_pages %}
+                disabled
+                {% endif %}>
+            >>
+        </button>
+        <!-- количество записей на странице (0 - 20 | 20 - 40 | ...) -->
+        <div id="list-count" class="list-count">{{ list_limit * list_offset // list_limit }}
+            - {{ [list_limit * list_offset // list_limit + list_limit, total_count]|min }}</div>
+    </div>
+{% endwith %}

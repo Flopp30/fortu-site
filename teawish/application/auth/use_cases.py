@@ -50,7 +50,9 @@ class UserRegisterUseCase:
         session = await self._session_repository.create(session)
         await self._uow.commit()
 
-        user_out = UserOut(id=user.id, name=user.name, email=user.email, created_at=user.created_at)
+        user_out = UserOut(
+            id=user.id, name=user.name, email=user.email, created_at=user.created_at, is_admin=user.is_admin
+        )
         return AuthorizedUser(user=user_out, session=session)
 
 
@@ -75,7 +77,9 @@ class UserLoginUseCase:
         user: User = await self._user_repository.get(user_filter=UserStorageFilter(email=email))
         self._password_encryptor.verify_password(password, user.password)
 
-        user_out = UserOut(id=user.id, name=user.name, email=user.email, created_at=user.created_at)
+        user_out = UserOut(
+            id=user.id, name=user.name, email=user.email, created_at=user.created_at, is_admin=user.is_admin
+        )
         try:
             session: Session = await self._session_repository.get(get_filter=SessionStorageFilter(user_id=user.id))
         except SessionDoesNotExistException:

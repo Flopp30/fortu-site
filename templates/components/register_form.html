@@ -2,8 +2,7 @@
     <h2 class="form-header">Регистрация</h2>
     <form hx-post="{{ url_for('register') }}"
           hx-target="#main-content"
-          hx-target-error="#content"
-          hx-swap="innerHTML">
+          hx-target-error="#content">
         <div class="form-group">
             <label for="username" class="visually-hidden">Имя пользователя</label>
             <input type="text" id="username" name="username" placeholder="Имя пользователя" required>
@@ -29,8 +28,7 @@
         <p>Уже есть аккаунт?
             <a href="#" hx-get="{{ url_for('login_form') }}"
                hx-target="#form-container"
-               hx-target-error="#content"
-               hx-swap="innerHTML">
+               hx-target-error="#content">
                 Войти
             </a>
         </p>

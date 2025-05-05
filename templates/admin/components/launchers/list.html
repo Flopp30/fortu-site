@@ -1,0 +1,51 @@
+<div class="admin-table-buttons">
+    <button class="button"
+            hx-get="{{ url_for('launchers_form') }}"
+            hx-target="#admin-content-container"
+            hx-target-errors="#content">
+        Создать новый лаунчер
+    </button>
+</div>
+<table>
+    <caption>Лаунчеры</caption>
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>version</th>
+        <th>creator email</th>
+        <th>created_at</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for launcher in objects %}
+        <tr>
+            <td>
+                <a hx-get="{{ url_for('launchers_form') }}?launcher_id={{ launcher.id }}"
+                   hx-target="#admin-content-container"
+                   hx-target-errors="#content"
+                   class="update-link">
+                    {{ launcher.id }}
+                </a>
+            </td>
+            <td>{{ launcher.version }}</td>
+            <td>{{ launcher.creator.email }}</td>
+            <td>{{ launcher.created_at|format_date }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="4">Empty :c</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="4">Total rows: {{ objects|length }}</td>
+    </tr>
+    </tfoot>
+</table>
+
+{% with list_url= url_for('launchers_list'),
+        target_container_selector = '#admin-content-container',
+        error_container_selector = '#content' %}
+    {% include 'common/htmx_paginator.html' %}
+{% endwith %}

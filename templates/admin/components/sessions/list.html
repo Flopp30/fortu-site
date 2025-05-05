@@ -1,0 +1,42 @@
+<table>
+    <caption>Сессии</caption>
+    <thead>
+    <tr>
+        <th>uuid</th>
+        <th>user email</th>
+        <th>created_at</th>
+        <th>expired_at</th>
+        <th>status</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for session in objects %}
+        {% with session_status = 'активна' if session.expired_at > now() else 'неактивна' %}
+            <tr>
+                <td>{{ session.id }}</td>
+                <td>{{ session.user.email }}</td>
+                <td>{{ session.created_at|format_date }}</td>
+                <td>{{ session.expired_at|format_date }}</td>
+                <td>
+                    {{ session_status }}
+                </td>
+            </tr>
+        {% endwith %}
+    {% else %}
+        <tr>
+            <td colspan="5">Empty :c</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="5">Total rows: {{ objects|length }}</td>
+    </tr>
+    </tfoot>
+</table>
+
+{% with list_url= url_for('sessions_list'),
+        target_container_selector = '#admin-content-container',
+        error_container_selector = '#content' %}
+    {% include 'common/htmx_paginator.html' %}
+{% endwith %}

@@ -30,12 +30,12 @@ async def login(
     password: str = Form(...),
 ) -> HTMLResponse:
     auth_user: AuthorizedUser = await use_case(email=email, password=password)
-    # if error:
+    # if error_message:
     #     return templates.TemplateResponse(
     #         "login_form.html",
     #         {
     #             "request": request,
-    #             "error_message": "Неверное имя пользователя или пароль"
+    #             "error_message": error_message
     #         }
     # FIXME обработать все ошибки тут, в register и в logout (UUID(session_id) может 500сотнуть)
     return success_auth_response(auth_user=auth_user, templates=templates, request=request)

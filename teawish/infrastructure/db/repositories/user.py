@@ -1,6 +1,7 @@
 from collections.abc import Sequence
 
-from sqlalchemy import select
+from sqlalchemy import select, desc
+from sqlalchemy.sql.functions import count
 
 from teawish.application.user.exceptions import (
     UserDoesNotExistsException,
@@ -30,3 +31,17 @@ class SqlAlchemyUserRepository(SqlAlchemyBaseRepository, IUserRepository):
             raise MultipleUserReturnsException('Multiple user returns')
 
         return users[0]
+
+    async def get_list(self, limit: int | None = None, offset: int | None = None) -> list[User]:
+        stmt = select(User).order_by(desc(User.created_at))
+        if limit is not None:
+            stmt = stmt.limit(limit)
+        if offset is not None:
+            stmt = stmt.offset(offset)
+        res = await self.session.execute(stmt)
+        return list(res.scalars().all())
+
+    async def total_count(self) -> int:
+        stmt = select(count(User.id)).select_from(User)
+        res = await self.session.execute(stmt)
+        return res.scalars().first()

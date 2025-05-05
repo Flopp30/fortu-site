@@ -1,6 +1,8 @@
 from collections.abc import Sequence
 
-from sqlalchemy import Select, select, text, Update, update
+from sqlalchemy import Select, select, text, Update, update, desc
+from sqlalchemy.orm import joinedload
+from sqlalchemy.sql.functions import count
 
 from teawish.application.auth.exceptions import SessionAlreadyExistsException, SessionDoesNotExistException
 from teawish.application.auth.interfaces import ISessionRepository, SessionStorageFilter
@@ -59,3 +61,17 @@ class SqlAlchemySessionRepository(SqlAlchemyBaseRepository, ISessionRepository):
             )
         )
         await self.session.execute(stmt)
+
+    async def get_list(self, limit: int | None = None, offset: int | None = None) -> list[Session]:
+        stmt = select(Session).join(User).options(joinedload(Session.user)).order_by(desc(Session.expired_at))  # type: ignore
+        if limit is not None:
+            stmt = stmt.limit(limit)
+        if offset is not None:
+            stmt = stmt.offset(offset)
+        res = await self.session.execute(stmt)
+        return list(res.scalars().all())
+
+    async def total_count(self) -> int:
+        stmt = select(count(Session.id)).select_from(Session)
+        res = await self.session.execute(stmt)
+        return res.scalars().first()

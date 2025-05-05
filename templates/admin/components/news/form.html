@@ -1,0 +1,47 @@
+{% if object %}
+    <div id="news-{{ object.id }}-update-form" class="form admin-form">
+        <h2 class="form-header">Обновление новости {{ object.id }}</h2>
+        <form hx-post="{{ url_for('news_update', news_id=object.id) }}"
+              hx-target="#admin-content-container"
+              hx-target-errors="#content">
+            <div class="form-group">
+                <label for="title" class="visually-hidden">Заголовок</label>
+                <input type="text" id="title" name="title" placeholder="Заголовок" value="{{ object.title }}" required>
+            </div>
+            <div class="form-group">
+                <label for="text" class="visually-hidden">Текст</label>
+                <textarea type="text" id="text" name="text" placeholder="Текст" required>{{ object.text }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="created_at" class="visually-hidden">Дата создания</label>
+                <input type="text" id="created_at" name="created_at" placeholder="Дата создания"
+                       value="{{ object.created_at|format_date }}" required>
+            </div>
+            {% if error_message %}
+                <div class="error-message" id="update-error">{{ error_message }}</div>
+            {% endif %}
+            <button class="button" type="submit">Сохранить</button>
+        </form>
+    </div>
+{% else %}
+    <div id="news-create-form" class="form admin-form">
+        <h2 class="form-header">Создание новости</h2>
+        <form hx-post="{{ url_for('news_create') }}"
+              hx-target="#admin-content-container"
+              hx-target-errors="#content">
+            <div class="form-group">
+                <label for="title" class="visually-hidden">Заголовок</label>
+                <input type="text" id="title" name="title" placeholder="Заголовок" required>
+            </div>
+
+            <div class="form-group">
+                <label for="text" class="visually-hidden">Текст</label>
+                <textarea type="text" id="text" name="text" placeholder="Текст новости" required></textarea>
+            </div>
+            {% if error_message %}
+                <div class="error-message" id="create-error">{{ error_message }}</div>
+            {% endif %}
+            <button class="button" type="submit">Создать</button>
+        </form>
+    </div>
+{% endif %}

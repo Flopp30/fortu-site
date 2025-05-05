@@ -2,8 +2,7 @@
     <h2 class="form-header">Вход</h2>
     <form hx-post="{{ url_for('login') }}"
           hx-target="#main-content"
-          hx-target-error="#content"
-          hx-swap="innerHTML">
+          hx-target-error="#content">
         <div class="form-group">
             <label for="email" class="visually-hidden">Email</label>
             <input type="text" id="email" name="email" placeholder="Email" required>
@@ -22,8 +21,7 @@
             <a href="#"
                hx-get="{{ url_for('register_form') }}"
                hx-target="#form-container"
-               hx-target-error="#content"
-               hx-swap="innerHTML">
+               hx-target-error="#content">
                 Зарегистрироваться
             </a>
         </p>

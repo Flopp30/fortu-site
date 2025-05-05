@@ -43,7 +43,7 @@ class WebConfig(BaseFromEnvConfig):
     discord_link: str = Field('https://discord.com', alias='DISCORD_LINK')
 
 
-class ApiConfig(BaseFromEnvConfig):
+class AppConfig(BaseFromEnvConfig):
     cors_origins: Annotated[list[str], BeforeValidator(split_string_from_env)] = Field(['*'], alias='API_CORS_ORIGINS')
     allow_headers: Annotated[list[str], BeforeValidator(split_string_from_env)] = Field(
         ['*'], alias='API_ALLOW_HEADERS'
@@ -52,10 +52,8 @@ class ApiConfig(BaseFromEnvConfig):
         ['*'], alias='API_ALLOW_METHODS'
     )
 
+    file_dir: str = Field('./storages/', alias='FILE_DIR')
+
 
 class AuthConfig(BaseFromEnvConfig):
     session_ttl_sec: int = Field(2592000, alias='AUTH_SESSION_TTL_SEC')
-
-
-class LauncherConfig(BaseFromEnvConfig):
-    launcher_path: Annotated[str, BeforeValidator(env_to_abs_path)] = Field('./from_env.sh', alias='LAUNCHER_PATH')

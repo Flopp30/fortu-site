@@ -1,0 +1,53 @@
+<div class="admin-table-buttons">
+    <button class="button"
+            hx-get="{{ url_for('news_form') }}"
+            hx-target="#admin-content-container"
+            hx-target-errors="#content">
+        Создать новость
+    </button>
+</div>
+<table>
+    <caption>Новости</caption>
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>title</th>
+        <th>text</th>
+        <th>created_at</th>
+        <th>creator email</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for news in objects %}
+        <tr>
+            <td>
+                <a hx-get="{{ url_for('news_form') }}?news_id={{ news.id }}"
+                   hx-target="#admin-content-container"
+                   hx-target-errors="#content"
+                   class="update-link">
+                    {{ news.id }}
+                </a>
+            </td>
+            <td>{{ news.title }}</td>
+            <td>{{ news.text }}</td>
+            <td>{{ news.created_at|format_date }}</td>
+            <td>{{ news.creator.email }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="5">Empty :c</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="5">Total rows: {{ objects|length }}</td>
+    </tr>
+    </tfoot>
+</table>
+
+{% with list_url= url_for('news_list'),
+        target_container_selector = '#admin-content-container',
+        error_container_selector = '#content' %}
+    {% include 'common/htmx_paginator.html' %}
+{% endwith %}

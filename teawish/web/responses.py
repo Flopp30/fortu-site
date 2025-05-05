@@ -7,6 +7,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 
 from teawish.application.auth.dto import AuthorizedUser
+from teawish.web.utils import is_htmx_request
 
 
 @dc.dataclass
@@ -30,8 +31,8 @@ def success_auth_response(auth_user: AuthorizedUser, request: Request, templates
     return response
 
 
-def change_browser_location_response(response: HTMLResponse, target_location: str) -> HTMLResponse:
-    response.headers['HX-Replace-Url'] = target_location
+def change_browser_location_response(response: HTMLResponse, new_location: str) -> HTMLResponse:
+    response.headers['HX-Replace-Url'] = new_location
     return response
 
 
@@ -39,3 +40,21 @@ def refresh_page_content_response(templates: Jinja2Templates, context: dict) -> 
     response = templates.TemplateResponse('components/refresh_page_content.html', context)
     response.headers['HX-Retarget'] = '#main-content'
     return change_browser_location_response(response, '/')
+
+
+def optional_template_response(
+    request: Request,
+    templates: Jinja2Templates,
+    base_template: str,
+    htmx_template: str,
+    context: dict,
+    new_location: str | None = None,
+) -> HTMLResponse:
+    """В зависимости от типа запроса подставляет разные шаблоны"""
+    template_name: str = base_template
+    if is_htmx_request(request):
+        template_name = htmx_template
+    response = templates.TemplateResponse(template_name, context=context)
+    if new_location is not None:
+        return change_browser_location_response(response, new_location)
+    return response

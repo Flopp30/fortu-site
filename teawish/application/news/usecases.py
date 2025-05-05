@@ -22,6 +22,6 @@ class GetUserNewsUseCase:
         except UserDoesNotExistsException:
             raise ExpiredSessionException('session expired')
 
-        news: list[News] = await self._news_repository.get_news()
+        news: list[News] = await self._news_repository.get_list()
 
-        return [UserNewsOut(text=n.text, title=n.title, id=n.id, created_at=n.created_at) for n in news]
+        return [UserNewsOut(text=n.text, title=n.title, id=n.id, created_at=n.created_at) for n in news]  # type: ignore

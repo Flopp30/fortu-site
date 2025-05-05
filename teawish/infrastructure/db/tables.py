@@ -44,3 +44,14 @@ news_table = Table(
     Column('created_at', DateTime, nullable=False),
     Column('creator_id', UUID, ForeignKey('users.id'), nullable=False),
 )
+
+
+launchers_table = Table(
+    'launchers',
+    metadata,
+    Column('id', Integer, primary_key=True),
+    Column('version', String(255), nullable=False, unique=True),
+    Column('created_at', DateTime, nullable=False),
+    Column('creator_id', UUID, ForeignKey('users.id'), nullable=False),
+    Column('file_path', String(255), nullable=False),
+)

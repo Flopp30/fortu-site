@@ -5,9 +5,8 @@
 {#        <p>Кажется, вы заблудились в чайном лесу...</p>#}
         <div class="error-actions">
             <button class="button"
-                    hx-get="{{ url_for('home_page') }}"
-                    hx-target="#content"
-                    hx-swap="innerHTML">
+                    hx-get="{{ url_for('refresh_page_content') }}"
+                    hx-target="#main-content">
                 Вернуться на главную
             </button>
         </div>

@@ -10,13 +10,15 @@
     <link rel="icon" href="{{ url_for('static', path='/img/logo.svg') }}" type="image/svg+xml">
 </head>
 <body id="body" hx-ext="response-targets">
-    <div id="main-content">
+<div id="main-content">
+    {% block main_content %}
         {% include "components/navbar.html" %}
         <div id="content">
             {% block content %}{% endblock %}
         </div>
-    </div>
-    {% include "components/footer.html" %}
-    <script src="{{ url_for('static', path='/js/main.js') }}"></script>
+    {% endblock %}
+</div>
+<script src="{{ url_for('static', path='/js/main.js') }}"></script>
+{% include "components/footer.html" %}
 </body>
 </html>

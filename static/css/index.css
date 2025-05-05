@@ -1,21 +1,24 @@
 :root {
     --base-white-color: #FFF;
     --base-green-color: #27696A;
+    --hover-green-color: #1C4343;
+    --base-red-color: #90413B;
+    --base-grey-color: #656565;
 
-    --hover-btn-color: #1C4343;
+    --hover-btn-color: var(--hover-green-color);
     --pressed-btn-color: #0F2B2C;
 
-    --disabled-link-color: #656565;
+    --disabled-link-color: var(--base-grey-color);
     --hover-link-color: #6495C7;
-    --pressed-link-color: #1C4343;
+    --pressed-link-color: var(--hover-green-color);
 
     --waiting-indicator-color: #3B6E90;
     --loaded-indicator-color: #3B904E;
-    --error-indicator-color: #90413B;
+    --error-indicator-color: var(--base-red-color);
 
-    --error-text-color: #90413B;
+    --error-text-color: var(--base-red-color);
 
-    --gray-background-color: rgba(19, 28, 33, 0.8)  /* серый фон для форм, футера и хедера */
+    --gray-background-color: rgba(19, 28, 33, 0.8) /* серый фон для форм, футера и хедера */
 }
 
 
@@ -79,7 +82,6 @@ body {
 
 #content {
     flex: 1;
-    padding: 20px;
 }
 
 /* Стили навигационной панели */
@@ -216,7 +218,7 @@ body {
 
 button:disabled, .button:disabled {
     background-color: var(--disabled-link-color);
-    cursor: not-allowed;
+    cursor: default;
 }
 
 
@@ -306,6 +308,7 @@ button:disabled, .button:disabled {
     background-color: rgba(72, 84, 97, 0.8); /* Фон для заполненных полей */
     color: var(--base-white-color); /* Белый текст для заполненных полей */
 }
+
 .form-group input:-webkit-autofill,
 .form-group input:-webkit-autofill:hover,
 .form-group input:-webkit-autofill:focus {
@@ -457,6 +460,7 @@ button:disabled, .button:disabled {
     scrollbar-width: thin;
     scrollbar-color: #C6C6C6 transparent;
 }
+
 .news-list::-webkit-scrollbar {
     width: 6px; /* Ширина полосы прокрутки */
 }
@@ -468,6 +472,103 @@ button:disabled, .button:disabled {
 
 .news-list::-webkit-scrollbar-thumb:hover {
     background: rgba(198, 198, 198, 0.43); /* Цвет ползунка при наведении */
+}
+
+/* Стили для таблицы */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--gray-background-color);
+}
+
+table caption {
+    background-color: var(--gray-background-color);
+    color: var(--base-white-color);
+    font-weight: bold;
+    font-size: 30px;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--base-green-color);
+    cursor: pointer;
+}
+
+th {
+    background-color: var(--base-green-color);
+    font-weight: bold;
+}
+
+th:hover, tr:hover {
+    background-color: var(--hover-green-color);
+}
+.update-link {
+    text-decoration: underline;
+    color: var(--base-green-color);
+}
+.update-link:hover {
+    color: var(--hover-link-color);
+}
+
+/* Стили для пагинации */
+.paginator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    max-width: 40%;
+}
+
+.paginator-button {
+    background-color: var(--base-green-color);
+    width: 10%;
+    cursor: pointer;
+    border-radius: 20px;
+    text-align: center;
+    color: var(--base-white-color);
+    padding: 15px;
+    border: none;
+    font-weight: 600;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    transition: background-color 0.3s;
+    text-decoration: none;
+}
+
+.paginator-button:hover {
+    background-color: var(--hover-btn-color);
+}
+
+.paginator-button:active {
+    background-color: var(--pressed-btn-color);
+}
+
+.paginator-button:disabled {
+    background-color: var(--disabled-link-color);
+    cursor: default;
+}
+
+.list-count {
+    margin-left: auto;
+    font-size: 0.9em;
+}
+
+/*Админка*/
+.admin-content {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    background-color: var(--gray-background-color);
+    height: 100%;
+    width: 100%;
+}
+
+.admin-content-container {
+    height: 100%;
+    width: 100%;
 }
 
 

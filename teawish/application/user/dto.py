@@ -16,4 +16,5 @@ class UserOut:
     id: USER_ID
     name: str
     email: str
+    is_admin: bool
     created_at: datetime.datetime

@@ -1,0 +1,38 @@
+<table>
+    <caption>Пользователи</caption>
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>username</th>
+        <th>email</th>
+        <th>created_at</th>
+        <th>is_admin</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in objects %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.created_at|format_date }}</td>
+            <td>{{ user.is_admin }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="5">Empty :c</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="5">Total rows: {{ objects|length }}</td>
+    </tr>
+    </tfoot>
+</table>
+
+{% with list_url= url_for('users_list'),
+        target_container_selector = '#admin-content-container',
+        error_container_selector = '#content' %}
+    {% include 'common/htmx_paginator.html' %}
+{% endwith %}
