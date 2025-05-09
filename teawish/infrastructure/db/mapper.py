@@ -30,7 +30,7 @@ mapper_registry.map_imperatively(
     News,
     news_table,
     properties={
-        'creator': relationship(User, back_populates='created_news'),
+        'creator': relationship(User, back_populates='created_news', lazy="joined"),
     },
 )
 
@@ -39,6 +39,6 @@ mapper_registry.map_imperatively(
     Launcher,
     launchers_table,
     properties={
-        'creator': relationship(User, back_populates='created_launchers'),
+        'creator': relationship(User, back_populates='created_launchers', lazy="joined"),
     },
 )

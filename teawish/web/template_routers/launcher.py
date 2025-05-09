@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 from starlette.responses import FileResponse
 
 from teawish.application.launcher.models import Launcher
-from teawish.application.launcher.usecases import GetCurrentLauncherUseCase
+from teawish.application.launcher.use_cases import GetCurrentLauncherUseCase
 
 
 @inject

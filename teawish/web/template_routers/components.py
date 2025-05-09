@@ -11,7 +11,7 @@ from starlette.templating import Jinja2Templates
 from teawish.application.auth.exceptions import ExpiredSessionException
 from teawish.application.auth.interfaces import SessionStorageFilter, ISessionRepository
 from teawish.application.news.dto import UserNewsOut
-from teawish.application.news.usecases import GetUserNewsUseCase
+from teawish.application.news.use_cases import GetUserNewsUseCase
 from teawish.application.user.models import User
 from teawish.web.responses import change_browser_location_response, refresh_page_content_response
 
