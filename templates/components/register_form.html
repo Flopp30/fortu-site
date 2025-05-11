@@ -7,7 +7,7 @@
             {% if errors and errors.name_errors %}
                 <div class="error-field-message" id="register-error">
                     {% for error_message in errors.name_errors %}
-                        <p>- {{ error_message }}</p>
+                        <p>{{ error_message }}</p>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -20,7 +20,7 @@
             {% if errors and errors.email_errors %}
                 <div class="error-field-message" id="register-error">
                     {% for error_message in errors.email_errors %}
-                        <p>- {{ error_message }}</p>
+                        <p>{{ error_message }}</p>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -32,7 +32,7 @@
             {% if errors and errors.password_errors %}
                 <div class="error-field-message" id="register-error">
                     {% for error_message in errors.password_errors %}
-                        <p>- {{ error_message }}</p>
+                        <p>{{ error_message }}</p>
                     {% endfor %}
                 </div>
             {% endif %}

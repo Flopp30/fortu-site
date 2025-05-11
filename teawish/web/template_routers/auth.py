@@ -9,11 +9,10 @@ from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
 from teawish.application.auth.dto import AuthorizedUser
-from teawish.application.auth.exceptions import NamePolicyViolationException, PasswordPolicyViolationException, EmailPolicyViolationException, \
-    RegistrationValidError, LoginValidError
+from teawish.application.auth.exceptions import RegistrationValidError
 from teawish.application.auth.use_cases import UserRegisterUseCase, UserLogoutUseCase, UserLoginUseCase
 from teawish.application.user.exceptions import UserDoesNotExistsException
-from teawish.web.responses import success_auth_response, refresh_page_content_response, template_target_response
+from teawish.web.responses import success_auth_response, template_target_response
 
 
 @inject
@@ -70,7 +69,7 @@ async def register(
         )
     except RegistrationValidError as e:
         form_data = await request.form()
-        context: dict = {'request': request, 'errors': e.to_dict()} | dict(form_data)
+        context: dict = {'request': request, 'errors': e.args[0]} | dict(form_data)
 
         response = templates.TemplateResponse(
             "components/register_form.html",

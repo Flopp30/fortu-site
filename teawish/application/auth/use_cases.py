@@ -2,7 +2,7 @@ import datetime
 
 from teawish.application.auth.dto import AuthorizedUser
 from teawish.application.auth.exceptions import SessionDoesNotExistException, EmailPolicyViolationException, \
-    PasswordPolicyViolationException, NamePolicyViolationException, RegistrationValidError, LoginValidError
+    PasswordPolicyViolationException, NamePolicyViolationException, RegistrationValidError
 from teawish.application.auth.interfaces import (
     IPasswordEncryptor,
     ISessionRepository,
@@ -35,26 +35,26 @@ class UserRegisterUseCase:
         self._session_service = session_service
 
     def _validate(self, name: str, email: str, password: str, confirm_password: str):
-        error = RegistrationValidError()
+        errors = {}
 
         if password != confirm_password:
-            error.confirm_password_errors.append("Пароли не совпадают")
+            errors['confirm_password_errors'] = ["Пароли не совпадают"]
 
         try:
             EmailValidator(email)
         except EmailPolicyViolationException as e:
-            error.email_errors.append(str(e))
+            errors['email_errors'] = [str(e)]
         try:
             RawPasswordValidator(password)
         except PasswordPolicyViolationException as e:
-            error.password_errors = e.errors
+            errors['password_errors'] = e.errors
         try:
             UserNameValidator(name)
         except NamePolicyViolationException as e:
-            error.name_errors.append(str(e))
+            errors['name_errors'] = [str(e)]
 
-        if error.has_errors:
-            raise error
+        if errors:
+            raise RegistrationValidError(errors)
 
     async def __call__(self, name: str, email: str, password: str, confirm_password: str) -> AuthorizedUser:
         self._validate(name, email, password, confirm_password)
