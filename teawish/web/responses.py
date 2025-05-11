@@ -1,10 +1,9 @@
 import dataclasses as dc
-
 from datetime import timezone
 
 from fastapi.requests import Request
-from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
 from teawish.application.auth.dto import AuthorizedUser
 from teawish.web.utils import is_htmx_request
@@ -43,12 +42,12 @@ def refresh_page_content_response(templates: Jinja2Templates, context: dict) -> 
 
 
 def optional_template_response(
-    request: Request,
-    templates: Jinja2Templates,
-    base_template: str,
-    htmx_template: str,
-    context: dict,
-    new_location: str | None = None,
+        request: Request,
+        templates: Jinja2Templates,
+        base_template: str,
+        htmx_template: str,
+        context: dict,
+        new_location: str | None = None,
 ) -> HTMLResponse:
     """В зависимости от типа запроса подставляет разные шаблоны"""
     template_name: str = base_template
@@ -57,4 +56,9 @@ def optional_template_response(
     response = templates.TemplateResponse(template_name, context=context)
     if new_location is not None:
         return change_browser_location_response(response, new_location)
+    return response
+
+
+def template_target_response(response: HTMLResponse, target: str) -> HTMLResponse:
+    response.headers['HX-Retarget'] = target
     return response

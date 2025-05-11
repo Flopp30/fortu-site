@@ -9,67 +9,84 @@ from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
 from teawish.application.auth.dto import AuthorizedUser
+from teawish.application.auth.exceptions import NamePolicyViolationException, PasswordPolicyViolationException, EmailPolicyViolationException, \
+    RegistrationValidError, LoginValidError
 from teawish.application.auth.use_cases import UserRegisterUseCase, UserLogoutUseCase, UserLoginUseCase
-from teawish.web.responses import success_auth_response
+from teawish.application.user.exceptions import UserDoesNotExistsException
+from teawish.web.responses import success_auth_response, refresh_page_content_response, template_target_response
 
 
 @inject
 async def login_form(
-    request: Request,
-    templates: FromDishka[Jinja2Templates],
+        request: Request,
+        templates: FromDishka[Jinja2Templates],
 ) -> HTMLResponse:
     return templates.TemplateResponse('components/login_form.html', {'request': request})
 
 
 @inject
 async def login(
-    templates: FromDishka[Jinja2Templates],
-    use_case: FromDishka[UserLoginUseCase],
-    request: Request,
-    email: str = Form(...),
-    password: str = Form(...),
+        templates: FromDishka[Jinja2Templates],
+        use_case: FromDishka[UserLoginUseCase],
+        request: Request,
+        email: str = Form(...),
+        password: str = Form(...),
 ) -> HTMLResponse:
-    auth_user: AuthorizedUser = await use_case(email=email, password=password)
-    # if error_message:
-    #     return templates.TemplateResponse(
-    #         "login_form.html",
-    #         {
-    #             "request": request,
-    #             "error_message": error_message
-    #         }
-    # FIXME обработать все ошибки тут, в register и в logout (UUID(session_id) может 500сотнуть)
+    try:
+        auth_user: AuthorizedUser = await use_case(email=email, password=password)
+    except UserDoesNotExistsException as e:
+        context: dict = {'request': request, 'error_message': 'Неверный логин или пароль'}
+
+        response = templates.TemplateResponse(
+            "components/login_form.html",
+            context
+        )
+        return template_target_response(response, '#form-container')
+
     return success_auth_response(auth_user=auth_user, templates=templates, request=request)
 
 
 @inject
 async def register_form(
-    request: Request,
-    templates: FromDishka[Jinja2Templates],
+        request: Request,
+        templates: FromDishka[Jinja2Templates],
 ) -> HTMLResponse:
     return templates.TemplateResponse('components/register_form.html', {'request': request})
 
 
 @inject
 async def register(
-    use_case: FromDishka[UserRegisterUseCase],
-    templates: FromDishka[Jinja2Templates],
-    request: Request,
-    email: str = Form(...),
-    password: str = Form(...),
-    confirm_password: str = Form(...),
-    username: str = Form(...),
+        use_case: FromDishka[UserRegisterUseCase],
+        templates: FromDishka[Jinja2Templates],
+        request: Request,
+        email: str = Form(...),
+        password: str = Form(...),
+        confirm_password: str = Form(...),
+        username: str = Form(...),
 ) -> HTMLResponse:
-    auth_user: AuthorizedUser = await use_case(
-        email=email, password=password, confirm_password=confirm_password, name=username
-    )
+    try:
+        auth_user: AuthorizedUser = await use_case(
+            email=email, password=password, confirm_password=confirm_password, name=username
+        )
+    except RegistrationValidError as e:
+        form_data = await request.form()
+        context: dict = {'request': request, 'errors': e.to_dict()} | dict(form_data)
+
+        response = templates.TemplateResponse(
+            "components/register_form.html",
+            context
+        )
+
+        return template_target_response(response, '#form-container')
+
     return success_auth_response(auth_user=auth_user, templates=templates, request=request)
 
 
 @inject
 async def logout(
-    request: Request,
-    use_case: FromDishka[UserLogoutUseCase],
-    templates: FromDishka[Jinja2Templates],
+        request: Request,
+        use_case: FromDishka[UserLogoutUseCase],
+        templates: FromDishka[Jinja2Templates],
 ):
     session_id: str | None = request.cookies.get('sessionId', None)
     if session_id:

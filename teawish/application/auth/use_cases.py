@@ -1,7 +1,8 @@
 import datetime
 
 from teawish.application.auth.dto import AuthorizedUser
-from teawish.application.auth.exceptions import SessionDoesNotExistException, PasswordMismatchException
+from teawish.application.auth.exceptions import SessionDoesNotExistException, EmailPolicyViolationException, \
+    PasswordPolicyViolationException, NamePolicyViolationException, RegistrationValidError, LoginValidError
 from teawish.application.auth.interfaces import (
     IPasswordEncryptor,
     ISessionRepository,
@@ -9,23 +10,23 @@ from teawish.application.auth.interfaces import (
     IAuthSessionService,
 )
 from teawish.application.auth.models import Session, SESSION_ID
+from teawish.application.common.validators.email import EmailValidator
+from teawish.application.common.validators.name import UserNameValidator
+from teawish.application.common.validators.password import RawPasswordValidator
 from teawish.application.db import IUoW
 from teawish.application.user.dto import UserOut
 from teawish.application.user.interfaces import IUserRepository, UserStorageFilter
 from teawish.application.user.models import User
-from teawish.application.common.validators.email import EmailValidator
-from teawish.application.common.validators.name import UserNameValidator
-from teawish.application.common.validators.password import RawPasswordValidator
 
 
 class UserRegisterUseCase:
     def __init__(
-        self,
-        user_repository: IUserRepository,
-        session_repository: ISessionRepository,
-        uow: IUoW,
-        password_encryptor: IPasswordEncryptor,
-        session_service: IAuthSessionService,
+            self,
+            user_repository: IUserRepository,
+            session_repository: ISessionRepository,
+            uow: IUoW,
+            password_encryptor: IPasswordEncryptor,
+            session_service: IAuthSessionService,
     ):
         self._user_repository = user_repository
         self._uow = uow
@@ -33,12 +34,30 @@ class UserRegisterUseCase:
         self._session_repository = session_repository
         self._session_service = session_service
 
-    async def __call__(self, name: str, email: str, password: str, confirm_password: str) -> AuthorizedUser:
+    def _validate(self, name: str, email: str, password: str, confirm_password: str):
+        error = RegistrationValidError()
+
         if password != confirm_password:
-            raise PasswordMismatchException
-        EmailValidator(email)
-        RawPasswordValidator(password)
-        UserNameValidator(name)
+            error.confirm_password_errors.append("Пароли не совпадают")
+
+        try:
+            EmailValidator(email)
+        except EmailPolicyViolationException as e:
+            error.email_errors.append(str(e))
+        try:
+            RawPasswordValidator(password)
+        except PasswordPolicyViolationException as e:
+            error.password_errors = e.errors
+        try:
+            UserNameValidator(name)
+        except NamePolicyViolationException as e:
+            error.name_errors.append(str(e))
+
+        if error.has_errors:
+            raise error
+
+    async def __call__(self, name: str, email: str, password: str, confirm_password: str) -> AuthorizedUser:
+        self._validate(name, email, password, confirm_password)
         hashed_pass: str = self._password_encryptor.hash_password(password)
 
         user: User = await self._user_repository.create(
@@ -58,12 +77,12 @@ class UserRegisterUseCase:
 
 class UserLoginUseCase:
     def __init__(
-        self,
-        user_repository: IUserRepository,
-        session_repository: ISessionRepository,
-        uow: IUoW,
-        password_encryptor: IPasswordEncryptor,
-        session_service: IAuthSessionService,
+            self,
+            user_repository: IUserRepository,
+            session_repository: ISessionRepository,
+            uow: IUoW,
+            password_encryptor: IPasswordEncryptor,
+            session_service: IAuthSessionService,
     ):
         self._user_repository = user_repository
         self._uow = uow
@@ -72,8 +91,6 @@ class UserLoginUseCase:
         self._session_service = session_service
 
     async def __call__(self, email: str, password: str) -> AuthorizedUser:
-        EmailValidator(email)
-        RawPasswordValidator(password)
         user: User = await self._user_repository.get(user_filter=UserStorageFilter(email=email))
         self._password_encryptor.verify_password(password, user.password)
 
@@ -92,9 +109,9 @@ class UserLoginUseCase:
 
 class UserLogoutUseCase:
     def __init__(
-        self,
-        session_repository: ISessionRepository,
-        uow: IUoW,
+            self,
+            session_repository: ISessionRepository,
+            uow: IUoW,
     ):
         self._uow = uow
         self._session_repository = session_repository

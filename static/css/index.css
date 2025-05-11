@@ -361,7 +361,12 @@ button:disabled, .button:disabled {
 
 .error-message {
     color: var(--error-text-color);
-    margin: 10px 0;
+    text-align: center;
+}
+
+.error-field-message {
+    color: var(--error-text-color);
+    margin: 12px 0 2px 13px;
 }
 
 /* Стили футера */
