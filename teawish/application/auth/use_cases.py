@@ -2,7 +2,7 @@ import datetime
 
 from teawish.application.auth.dto import AuthorizedUser
 from teawish.application.auth.exceptions import SessionDoesNotExistException, EmailPolicyViolationException, \
-    PasswordPolicyViolationException, NamePolicyViolationException, RegistrationValidError
+    PasswordPolicyViolationException, NamePolicyViolationException, RegistrationValidError, PasswordMismatchException
 from teawish.application.auth.interfaces import (
     IPasswordEncryptor,
     ISessionRepository,
@@ -92,7 +92,9 @@ class UserLoginUseCase:
 
     async def __call__(self, email: str, password: str) -> AuthorizedUser:
         user: User = await self._user_repository.get(user_filter=UserStorageFilter(email=email))
-        self._password_encryptor.verify_password(password, user.password)
+        is_verify: bool = self._password_encryptor.verify_password(password, user.password)
+        if not is_verify:
+            raise PasswordMismatchException
 
         user_out = UserOut(
             id=user.id, name=user.name, email=user.email, created_at=user.created_at, is_admin=user.is_admin

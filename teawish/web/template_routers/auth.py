@@ -9,7 +9,7 @@ from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
 from teawish.application.auth.dto import AuthorizedUser
-from teawish.application.auth.exceptions import RegistrationValidError
+from teawish.application.auth.exceptions import RegistrationValidError, PasswordMismatchException
 from teawish.application.auth.use_cases import UserRegisterUseCase, UserLogoutUseCase, UserLoginUseCase
 from teawish.application.user.exceptions import UserDoesNotExistsException
 from teawish.web.responses import success_auth_response, template_target_response
@@ -33,7 +33,7 @@ async def login(
 ) -> HTMLResponse:
     try:
         auth_user: AuthorizedUser = await use_case(email=email, password=password)
-    except UserDoesNotExistsException as e:
+    except (UserDoesNotExistsException, PasswordMismatchException) as e:
         context: dict = {'request': request, 'error_message': 'Неверный логин или пароль'}
 
         response = templates.TemplateResponse(

@@ -25,3 +25,15 @@ class GetUserNewsUseCase:
         news: list[News] = await self._news_repository.get_list()
 
         return [UserNewsOut(text=n.text, title=n.title, id=n.id, created_at=n.created_at) for n in news]  # type: ignore
+
+
+class NonAuthorizedUserNews:
+    def __init__(
+        self,
+        news_repository: INewsRepository,
+    ):
+        self._news_repository = news_repository
+
+    async def __call__(self):
+        news: list[News] = await self._news_repository.get_list()
+        return [UserNewsOut(text=n.text, title=n.title, id=n.id, created_at=n.created_at) for n in news]  # type: ignore

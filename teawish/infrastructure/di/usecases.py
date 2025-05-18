@@ -11,7 +11,7 @@ from teawish.application.auth.use_cases import (
     UserLogoutUseCase,
 )
 from teawish.application.launcher.use_cases import GetCurrentLauncherUseCase, AdminCreateLauncherUseCase
-from teawish.application.news.use_cases import GetUserNewsUseCase
+from teawish.application.news.use_cases import GetUserNewsUseCase, NonAuthorizedUserNews
 
 
 class UseCaseProvider(Provider):
@@ -25,6 +25,9 @@ class UseCaseProvider(Provider):
     # business
     get_news = provide(GetUserNewsUseCase)
     get_current_launcher = provide(GetCurrentLauncherUseCase)
+
+    # business api
+    get_api_news = provide(NonAuthorizedUserNews)
 
     # admin
     create_launcher = provide(AdminCreateLauncherUseCase)
