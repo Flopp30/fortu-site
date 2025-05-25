@@ -19,12 +19,12 @@ from teawish.application.user.models import User
 log = logging.getLogger(__name__)
 
 
-class GetNewsListPageUseCase:
+class AdminNewsListUseCase:
     def __init__(
-            self,
-            user_repository: IUserRepository,
-            session_repository: ISessionRepository,
-            news_repo: FromDishka[INewsRepository],
+        self,
+        user_repository: IUserRepository,
+        session_repository: ISessionRepository,
+        news_repo: FromDishka[INewsRepository],
     ):
         self._user_repository = user_repository
         self._session_repository = session_repository
@@ -49,11 +49,11 @@ class GetNewsListPageUseCase:
         return context
 
 
-class GetNewsFormPageUseCase:
+class AdminNewsFormUseCase:
     def __init__(
-            self,
-            session_repository: ISessionRepository,
-            news_repo: INewsRepository,
+        self,
+        session_repository: ISessionRepository,
+        news_repo: INewsRepository,
     ):
         self._session_repository = session_repository
         self._news_repo = news_repo
@@ -72,12 +72,12 @@ class GetNewsFormPageUseCase:
         return context
 
 
-class CreateNewsFormPageUseCase:
+class AdminCreateNewsUseCase:
     def __init__(
-            self,
-            session_repository: ISessionRepository,
-            news_repo: INewsRepository,
-            uow: IUoW,
+        self,
+        session_repository: ISessionRepository,
+        news_repo: INewsRepository,
+        uow: IUoW,
     ):
         self._session_repository = session_repository
         self._news_repo = news_repo
@@ -91,20 +91,18 @@ class CreateNewsFormPageUseCase:
             raise AccessDenied
 
         news: News = News(title=title, text=text, created_at=datetime.now(), creator_id=user.id)
-        context: dict = {
-            'object': await self._news_repo.create(news)
-        }
+        context: dict = {'object': await self._news_repo.create(news)}
 
         await self._uow.commit()
         return context
 
 
-class UpdateNewsPageUseCase:
+class AdminUpdateNewsUseCase:
     def __init__(
-            self,
-            session_repository: ISessionRepository,
-            news_repo: INewsRepository,
-            uow: IUoW,
+        self,
+        session_repository: ISessionRepository,
+        news_repo: INewsRepository,
+        uow: IUoW,
     ):
         self._session_repository = session_repository
         self._news_repo = news_repo
@@ -122,7 +120,7 @@ class UpdateNewsPageUseCase:
             title=title,
             text=text,
             created_at=datetime.strptime(created_at, '%H:%M %d.%m.%Y'),
-            creator_id=user.id
+            creator_id=user.id,
         )
         context = {'object': news}
         await self._news_repo.update(news)

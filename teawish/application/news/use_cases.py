@@ -16,7 +16,7 @@ class GetUserNewsUseCase:
         self._news_repository = news_repository
         self._session_repository = session_repository
 
-    async def __call__(self, session_id: SESSION_ID):
+    async def __call__(self, session_id: SESSION_ID) -> list[UserNewsOut]:
         try:
             await self._session_repository.get_user(SessionStorageFilter(session_id=session_id))
         except UserDoesNotExistsException:

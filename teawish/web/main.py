@@ -8,12 +8,14 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
-from teawish.config import DatabaseConfig, WebConfig, AppConfig, AuthConfig
+from teawish.config import AppConfig, AuthConfig, DatabaseConfig, WebConfig
+from teawish.config.config import GameServerConfig
 from teawish.infrastructure.di.config import ConfigProvider
-from teawish.infrastructure.di.database import RepositoriesProvider, DatabaseProvider
+from teawish.infrastructure.di.database import DatabaseProvider, RepositoriesProvider
+from teawish.infrastructure.di.game_server import GameServerProvider
 from teawish.infrastructure.di.security import SecurityProvider
 from teawish.infrastructure.di.storage import StoragesProvider
-from teawish.infrastructure.di.usecases import UseCaseProvider
+from teawish.infrastructure.di.use_cases import UseCaseProvider
 from teawish.infrastructure.logging import setup_logging
 from teawish.web.api_routers import setup_api_routers
 from teawish.web.exceptions import setup_exception_handlers
@@ -25,7 +27,7 @@ def create_app() -> FastAPI:
     app_config: AppConfig = AppConfig.from_env()
     setup_logging()
     app = FastAPI(
-        title='Fortu-site',
+        title='Teawish-site',
         version='0.1.0',
         default_response_class=ORJSONResponse,
     )
@@ -66,11 +68,13 @@ def setup_ioc_container(app: FastAPI, templates: Jinja2Templates, app_config: Ap
         UseCaseProvider(),
         RepositoriesProvider(),
         StoragesProvider(),
+        GameServerProvider(),
         context={
             # config
             DatabaseConfig: DatabaseConfig.from_env(),
             AuthConfig: AuthConfig.from_env(),
             AppConfig: app_config,
+            GameServerConfig: GameServerConfig.from_env(),
             # templates
             Jinja2Templates: templates,
         },

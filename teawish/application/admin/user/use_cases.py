@@ -13,11 +13,11 @@ from teawish.application.user.models import User
 log = logging.getLogger(__name__)
 
 
-class GetUsersListPageUseCase:
+class AdminUsersListUseCase:
     def __init__(
-            self,
-            user_repository: IUserRepository,
-            session_repository: ISessionRepository,
+        self,
+        user_repository: IUserRepository,
+        session_repository: ISessionRepository,
     ):
         self._user_repository = user_repository
         self._session_repository = session_repository

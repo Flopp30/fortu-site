@@ -14,8 +14,8 @@ log = logging.getLogger(__name__)
 
 class GetAdminPageUseCase:
     def __init__(
-            self,
-            session_repository: ISessionRepository,
+        self,
+        session_repository: ISessionRepository,
     ):
         self._session_repository = session_repository
 

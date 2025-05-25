@@ -1,0 +1,48 @@
+{% if object %}
+    <div id="installer-{{ object.id }}-update-form" class="form admin-form">
+        <h2 class="form-header">Обновление инсталлера {{ object.id }}</h2>
+        <form hx-post="{{ url_for('installers_update', installer_id=object.id) }}"
+              hx-target="#admin-content-container"
+              hx-target-errors="#content">
+            <div class="form-group">
+                <label for="version" class="visually-hidden">Версия</label>
+                <input type="text" id="version" name="version" placeholder="Версия" value="{{ object.version }}"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="file" class="visually-hidden">Файл</label>
+                <input type="file" id="file" name="file" placeholder="Файл">
+            </div>
+
+            {% if error_message %}
+                <div class="error-message" id="update-error">{{ error_message }}</div>
+            {% endif %}
+            <button class="button" type="submit">Сохранить</button>
+        </form>
+    </div>
+{% else %}
+    <div id="installer-create-form" class="form admin-form">
+        <h2 class="form-header">Создание нового инсталлера</h2>
+        <form hx-post="{{ url_for('installers_create') }}"
+              hx-target="#admin-content-container"
+              hx-target-errors="#content"
+              enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label for="version" class="visually-hidden">Версия</label>
+                <input type="text" id="version" name="version" placeholder="Версия" required>
+            </div>
+
+            <div class="form-group">
+                <label for="file" class="visually-hidden">Файл</label>
+                <input type="file" id="file" name="file" placeholder="Файл" required>
+            </div>
+
+            {% if error_message %}
+                <div class="error-message" id="create-error">{{ error_message }}</div>
+            {% endif %}
+            <button class="button" type="submit">Создать</button>
+        </form>
+    </div>
+{% endif %}

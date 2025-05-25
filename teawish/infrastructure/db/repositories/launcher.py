@@ -1,7 +1,7 @@
 from sqlalchemy import select, desc
 from sqlalchemy.sql.functions import count
 
-from teawish.application.launcher.exception import LauncherDoesNotExistsException
+from teawish.application.launcher.exceptions import LauncherDoesNotExistsException
 from teawish.application.launcher.interfaces import ILauncherRepository
 from teawish.application.launcher.models import Launcher
 from teawish.application.user.models import User

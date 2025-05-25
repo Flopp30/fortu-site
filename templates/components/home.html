@@ -10,7 +10,7 @@
             <!--- Empty div ensuring place until real indicator has been loaded --->
             <div id="waiting-indicator" class="server-indicator waiting"><span>Получение информации</span></div>
         </div>
-        <a href="{{ url_for('download_launcher') }}" class="button" download>Скачать лаунчер</a>
+        <a href="{{ url_for('download_installer') }}" class="button" download>Скачать лаунчер</a>
     </div>
     {% if user %}
         <div id="news-container"

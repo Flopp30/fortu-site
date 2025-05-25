@@ -9,7 +9,9 @@ from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
 from teawish.application.auth.exceptions import ExpiredSessionException
-from teawish.application.auth.interfaces import SessionStorageFilter, ISessionRepository
+from teawish.application.auth.interfaces import ISessionRepository, SessionStorageFilter
+from teawish.application.game_server.dto import ServerInfo
+from teawish.application.game_server.use_cases import GetGameServerStatusUseCase
 from teawish.application.news.dto import UserNewsOut
 from teawish.application.news.use_cases import GetUserNewsUseCase
 from teawish.application.user.models import User
@@ -61,13 +63,14 @@ class ServerStatus(Enum):
 async def online_indicator(
     request: Request,
     templates: FromDishka[Jinja2Templates],
+    use_case: FromDishka[GetGameServerStatusUseCase],
 ) -> HTMLResponse:
+    server_info: ServerInfo = await use_case()
     context: dict = {
         'request': request,
-        'online_users': 1,
-        'total_users': 20,
-        # 'server_status': ServerStatus.offline.value,
-        'server_status': ServerStatus.online.value,
+        'online_users': server_info.online_users,
+        'total_users': server_info.total_users,
+        'server_status': server_info.status.value,
     }
     return templates.TemplateResponse('components/online_indicator.html', context=context)
 
@@ -84,9 +87,9 @@ async def get_news(
         return refresh_page_content_response(templates, context)
 
     try:
-        # сессия устарела
         news_list: list[UserNewsOut] = await use_case(UUID(session_id))
     except ExpiredSessionException:
+        # сессия устарела
         return refresh_page_content_response(templates, context)
 
     context.update({'news_list': news_list})

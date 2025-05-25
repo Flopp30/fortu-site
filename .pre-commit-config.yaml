@@ -43,6 +43,7 @@ repos:
     - bcrypt
     - dishka
     - alembic
+    - types-aiofiles
 
   - id: mypy
     alias: mypy_strict
@@ -63,3 +64,4 @@ repos:
     - bcrypt
     - dishka
     - alembic
+    - types-aiofiles

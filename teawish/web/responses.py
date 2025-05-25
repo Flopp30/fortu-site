@@ -1,12 +1,19 @@
 import dataclasses as dc
+import logging
+import os
 from datetime import timezone
 
+import aiofiles
+from fastapi import HTTPException
 from fastapi.requests import Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
+from urllib import parse
 
 from teawish.application.auth.dto import AuthorizedUser
 from teawish.web.utils import is_htmx_request
+
+log = logging.getLogger(__name__)
 
 
 @dc.dataclass
@@ -42,12 +49,12 @@ def refresh_page_content_response(templates: Jinja2Templates, context: dict) -> 
 
 
 def optional_template_response(
-        request: Request,
-        templates: Jinja2Templates,
-        base_template: str,
-        htmx_template: str,
-        context: dict,
-        new_location: str | None = None,
+    request: Request,
+    templates: Jinja2Templates,
+    base_template: str,
+    htmx_template: str,
+    context: dict,
+    new_location: str | None = None,
 ) -> HTMLResponse:
     """В зависимости от типа запроса подставляет разные шаблоны"""
     template_name: str = base_template
@@ -62,3 +69,25 @@ def optional_template_response(
 def template_target_response(response: HTMLResponse, target: str) -> HTMLResponse:
     response.headers['HX-Retarget'] = target
     return response
+
+
+def streaming_file_response(file_path: str) -> StreamingResponse:
+    if not os.path.exists(file_path) or not os.path.isfile(file_path):
+        raise HTTPException(status_code=404, detail='Файл не найден')
+
+    filename: str = file_path.split('/')[-1]
+
+    async def async_file_iterator():
+        async with aiofiles.open(file_path, 'rb') as file:
+            while True:
+                chunk = await file.read(1024 * 1024 * 32)  # 32MB
+                if not chunk:
+                    break
+                yield chunk
+
+    log.error(f'check path: {file_path}')
+    return StreamingResponse(
+        async_file_iterator(),
+        media_type='application/octet-stream',
+        headers={'Content-Disposition': f"attachment; filename*=UTF-8''{parse.quote(filename)}"},
+    )

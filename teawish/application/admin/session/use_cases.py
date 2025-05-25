@@ -10,10 +10,10 @@ from teawish.application.user.models import User
 log = logging.getLogger(__name__)
 
 
-class GetSessionListPageUseCase:
+class AdminSessionListUseCase:
     def __init__(
-            self,
-            session_repository: ISessionRepository,
+        self,
+        session_repository: ISessionRepository,
     ):
         self._session_repository = session_repository
 

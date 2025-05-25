@@ -1,6 +1,5 @@
 <div id="admin-content" class="admin-content">
     <div id="admin-navigation" class="admin-navigation">
-
         <div id="admin-nav-item-news"
              class="nav-item"
              hx-get="{{ url_for('news_list') }}?limit={{ list_limit }}"
@@ -14,6 +13,13 @@
              hx-target="#admin-content-container"
              hx-target-errors="#content">
             Лаунчеры
+        </div>
+        <div id="admin-nav-item-installers"
+             class="nav-item"
+             hx-get="{{ url_for('installers_list') }}?limit={{ list_limit }}"
+             hx-target="#admin-content-container"
+             hx-target-errors="#content">
+            Инсталлеры
         </div>
         <div id="admin-nav-item-users"
              class="nav-item"
@@ -30,7 +36,6 @@
             Сессии
         </div>
     </div>
-
     <div id="admin-content-container" class="admin-content-container">
 
     </div>

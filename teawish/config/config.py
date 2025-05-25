@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from pydantic import Field, BeforeValidator
+from pydantic import BeforeValidator, Field
 
 from teawish.config.utils import (
     BaseFromEnvConfig,
@@ -57,3 +57,8 @@ class AppConfig(BaseFromEnvConfig):
 
 class AuthConfig(BaseFromEnvConfig):
     session_ttl_sec: int = Field(2592000, alias='AUTH_SESSION_TTL_SEC')
+
+
+class GameServerConfig(BaseFromEnvConfig):
+    address: str = Field(..., alias='GAME_SERVER_ADDRESS')
+    port: int = Field(..., alias='GAME_SERVER_PORT')
