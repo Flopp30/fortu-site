@@ -1,5 +1,3 @@
-import datetime
-
 from dishka import AsyncContainer, make_async_container
 from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
@@ -19,6 +17,7 @@ from teawish.infrastructure.di.use_cases import UseCaseProvider
 from teawish.infrastructure.logging import setup_logging
 from teawish.web.api_routers import setup_api_routers
 from teawish.web.exceptions import setup_exception_handlers
+from teawish.web.jinja_templates import get_templates
 from teawish.web.middlewares import TimingMiddleware
 from teawish.web.template_routers import setup_template_routers
 
@@ -82,20 +81,6 @@ def setup_ioc_container(app: FastAPI, templates: Jinja2Templates, app_config: Ap
 
     setup_dishka(container, app)
     return container
-
-
-def get_templates(web_config: WebConfig) -> Jinja2Templates:
-    templates = Jinja2Templates(
-        directory=web_config.templates_dir,
-    )
-    register_filters(templates, web_config)
-    return templates
-
-
-def register_filters(templates: Jinja2Templates, web_config: WebConfig):
-    templates.env.globals['now'] = datetime.datetime.now
-    templates.env.filters['format_date'] = lambda dt: dt.strftime('%H:%M %d.%m.%Y')
-    templates.env.globals['discord_link'] = web_config.discord_link
 
 
 def setup_static(app: FastAPI, web_config: WebConfig):
