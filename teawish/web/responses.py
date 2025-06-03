@@ -2,13 +2,13 @@ import dataclasses as dc
 import logging
 import os
 from datetime import timezone
+from urllib import parse
 
 import aiofiles
 from fastapi import HTTPException
 from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
-from urllib import parse
 
 from teawish.application.auth.dto import AuthorizedUser
 from teawish.web.utils import is_htmx_request
@@ -76,6 +76,7 @@ def streaming_file_response(file_path: str) -> StreamingResponse:
         raise HTTPException(status_code=404, detail='Файл не найден')
 
     filename: str = file_path.split('/')[-1]
+    file_size: int = os.path.getsize(file_path)
 
     async def async_file_iterator():
         async with aiofiles.open(file_path, 'rb') as file:
@@ -89,5 +90,8 @@ def streaming_file_response(file_path: str) -> StreamingResponse:
     return StreamingResponse(
         async_file_iterator(),
         media_type='application/octet-stream',
-        headers={'Content-Disposition': f"attachment; filename*=UTF-8''{parse.quote(filename)}"},
+        headers={
+            'Content-Disposition': f"attachment; filename*=UTF-8''{parse.quote(filename)}",
+            'Content-Length': str(file_size),
+        },
     )
