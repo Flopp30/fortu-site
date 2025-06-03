@@ -86,7 +86,6 @@ def streaming_file_response(file_path: str) -> StreamingResponse:
                     break
                 yield chunk
 
-    log.error(f'check path: {file_path}')
     return StreamingResponse(
         async_file_iterator(),
         media_type='application/octet-stream',
