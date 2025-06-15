@@ -14,7 +14,7 @@
     </div>
     {% if user %}
         <div id="news-container"
-             class="content-container"
+             class="content-container news-block"
              hx-get="{{ url_for('get_news') }}"
              hx-trigger="load"
              hx-target="#news-container"

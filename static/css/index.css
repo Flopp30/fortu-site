@@ -508,10 +508,12 @@ th {
 th:hover, tr:hover {
     background-color: var(--hover-green-color);
 }
+
 .update-link {
     text-decoration: underline;
     color: var(--base-green-color);
 }
+
 .update-link:hover {
     color: var(--hover-link-color);
 }
@@ -606,6 +608,10 @@ th:hover, tr:hover {
     text-decoration: none;
 }
 
+.news-block {
+    max-width: 50%;
+}
+
 @media (max-width: 768px) {
     #footer-container {
         flex-direction: column;
@@ -651,6 +657,10 @@ th:hover, tr:hover {
         margin-top: 10px;
         width: 100%;
         justify-content: flex-end;
+    }
+
+    .news-block {
+        max-width: 90%;
     }
 }
 
