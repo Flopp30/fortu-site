@@ -41,6 +41,7 @@ class WebConfig(BaseFromEnvConfig):
     static_path: str = Field('/static/', alias='WEB_STATIC_PATH')
 
     discord_link: str = Field('https://discord.com', alias='DISCORD_LINK')
+    world_map_address: str = Field('https://discord.com', alias='WORLD_MAP_ADDRESS')
 
 
 class AppConfig(BaseFromEnvConfig):

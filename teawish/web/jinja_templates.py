@@ -22,6 +22,7 @@ def register_filters(templates: Jinja2Templates, web_config: WebConfig):
     templates.env.filters['format_date'] = lambda dt: dt.strftime('%H:%M %d.%m.%Y')
     templates.env.globals['discord_link'] = web_config.discord_link
     templates.env.globals['url_for'] = urlx_for
+    templates.env.globals['world_map_address'] = web_config.world_map_address
 
 
 @pass_context

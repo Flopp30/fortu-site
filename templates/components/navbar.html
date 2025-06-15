@@ -31,6 +31,11 @@
              class="nav-item">
             Главная
         </div>
+        <a href="{{ world_map_address }}" class="link" target="_blank">
+            <div id="world-map-link" class="nav-item">
+                Карта мира
+            </div>
+        </a>
         {% if user %}
             <div id="user-info" class="nav-item disabled">
                 {{ user.name }}
